@@ -9,8 +9,8 @@ import java.util.Map;
 @Getter
 public class StudentDaoImpl implements StudentDao {
 
-    private Map<Student, Integer> testResult = new HashMap<>();
     private final static Integer DEFAULT_TEST_RESULT = 0;
+    private final Map<Student, Integer> testResult = new HashMap<>();
 
     @Override
     public Student addNewStudent(String firstName, String lastName) {

@@ -8,13 +8,6 @@ import ru.otus.spring.domain.Student;
 @DisplayName("класс StudentDaoImpl")
 class StudentDaoImplTest {
 
-    @DisplayName("должен иметь поле testResult")
-    @Test
-    void shouldHavePropertyTestResult() {
-        StudentDaoImpl dao = new StudentDaoImpl();
-        Assertions.assertThat(dao).hasFieldOrProperty("testResult");
-    }
-
     @DisplayName("должен добавлять нового студента в мапу")
     @Test
     void shouldCorrectAddNewStudent() {

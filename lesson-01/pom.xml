@@ -15,14 +15,6 @@
         <java.version>11</java.version>
     </properties>
 
-    <!-- Здесь находится много настроек, в частности maven-surefire-plugin -->
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.1.RELEASE</version>
-        <relativePath/>
-    </parent>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -51,6 +43,16 @@
             <groupId>net.sf.opencsv</groupId>
             <artifactId>opencsv</artifactId>
             <version>2.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>1.7.29</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>1.7.29</version>
         </dependency>
     </dependencies>
 </project>

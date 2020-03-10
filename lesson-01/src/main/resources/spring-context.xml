@@ -9,6 +9,8 @@
     </bean>
     <bean id="testService" class="ru.otus.spring.service.TestServiceImpl">
         <constructor-arg name="studentDao" ref="studentDao"/>
+        <constructor-arg name="questionResourceFile" value="Questions.csv"/>
+        <constructor-arg name="answerResourceFile" value="Answer.csv"/>
     </bean>
 
 </beans>
