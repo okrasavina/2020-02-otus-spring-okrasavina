@@ -1,8 +1,10 @@
 package ru.otus.spring.dao;
 
+import ru.otus.spring.domain.Student;
+
 public class StudentNotFoundException extends RuntimeException {
 
-    public StudentNotFoundException(String message) {
-        super(message);
+    public StudentNotFoundException(Student student) {
+        super("Student " + student.getFirstName() + " " + student.getLastName() + " not found.");
     }
 }

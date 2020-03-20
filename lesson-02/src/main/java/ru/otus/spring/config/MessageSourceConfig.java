@@ -12,7 +12,7 @@ public class MessageSourceConfig {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource ms = new ReloadableResourceBundleMessageSource();
         ms.setBasename("/i18n/bundle");
-        ms.setDefaultEncoding("windows-1251");
+        ms.setDefaultEncoding("UTF-8");
         return ms;
     }
 

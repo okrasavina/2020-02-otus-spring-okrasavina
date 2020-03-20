@@ -1,8 +1,9 @@
 package ru.otus.spring.domain;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("класс Student")
 class StudentTest {
@@ -12,7 +13,7 @@ class StudentTest {
     void shouldCorrectConstructor() {
         Student maxim = new Student("Maxim", "Ivanov");
 
-        Assertions.assertThat(maxim.getFirstName()).isEqualTo("Maxim");
-        Assertions.assertThat(maxim.getLastName()).isEqualTo("Ivanov");
+        assertThat(maxim.getFirstName()).isEqualTo("Maxim");
+        assertThat(maxim.getLastName()).isEqualTo("Ivanov");
     }
 }

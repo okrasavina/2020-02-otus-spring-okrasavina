@@ -23,9 +23,7 @@ public class Application {
         try {
             service.run();
         } catch (IOException e) {
-            if (log.isWarnEnabled()) {
-                log.warn(e.getMessage());
-            }
+            log.warn(e.getMessage());
         }
 
     }

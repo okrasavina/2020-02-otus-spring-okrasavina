@@ -12,7 +12,7 @@ import java.util.Map;
 @Service
 public class StudentDaoImpl implements StudentDao {
 
-    private final static Integer DEFAULT_TEST_RESULT = 0;
+    private static final Integer DEFAULT_TEST_RESULT = 0;
     private final Map<Student, Integer> testResult = new HashMap<>();
 
     @Override
@@ -25,7 +25,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public void addPointToTestResult(Student student) throws StudentNotFoundException {
         if (!(testResult.containsKey(student))) {
-            throw new StudentNotFoundException("Student " + student.getFirstName() + " " + student.getLastName() + " not found.");
+            throw new StudentNotFoundException(student);
         } else {
             testResult.put(student, testResult.get(student) + 1);
         }
@@ -34,7 +34,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public Integer getTestResultByStudent(Student student) throws StudentNotFoundException {
         if (!(testResult.containsKey(student))) {
-            throw new StudentNotFoundException("Student " + student.getFirstName() + " " + student.getLastName() + " not found.");
+            throw new StudentNotFoundException(student);
         } else {
             return testResult.get(student);
         }
@@ -43,7 +43,7 @@ public class StudentDaoImpl implements StudentDao {
     @Override
     public String getFullName(Student student) throws StudentNotFoundException {
         if (!(testResult.containsKey(student))) {
-            throw new StudentNotFoundException("Student " + student.getFirstName() + " " + student.getLastName() + " not found.");
+            throw new StudentNotFoundException(student);
         } else {
             return student.getFirstName() + " " + student.getLastName();
         }
