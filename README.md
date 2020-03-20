@@ -3,4 +3,5 @@
 Красавина Ольга Владимировна
 Группа - Spring Framework 2020-02
 /lesson-01 - Введение в Spring Framework
+/lesson-02 - Конфигурирование Spring-приложений 
 
