@@ -1,0 +1,3 @@
+application:
+  answer-file-name: Answer.csv
+  locale: ru_RU
