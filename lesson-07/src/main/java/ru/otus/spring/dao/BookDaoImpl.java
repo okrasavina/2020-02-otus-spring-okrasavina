@@ -46,8 +46,6 @@ public class BookDaoImpl implements BookDao {
     @Override
     public void deleteById(long id) {
         jdbcOperations.update("delete from book where id = :id", Map.of("id", id));
-        deleteBookAuthorLinkByBookId(id);
-        deleteBookGenreLinkByBookId(id);
     }
 
     @Override
@@ -66,14 +64,6 @@ public class BookDaoImpl implements BookDao {
     public List<Book> getAllByGenreId(long genreId) {
         return jdbcOperations.query("select b.* from book_genre_link l join book b on b.id = l.book_id where genre_id = :id",
                 Map.of("id", genreId), new BookMapper());
-    }
-
-    private void deleteBookGenreLinkByBookId(long bookId) {
-        jdbcOperations.update("delete from book_genre_link where book_id = :id", Map.of("id", bookId));
-    }
-
-    private void deleteBookAuthorLinkByBookId(long bookId) {
-        jdbcOperations.update("delete from book_author_link where book_id = :id", Map.of("id", bookId));
     }
 
     private void insertBookGenreLink(long bookId, List<Genre> genres) {

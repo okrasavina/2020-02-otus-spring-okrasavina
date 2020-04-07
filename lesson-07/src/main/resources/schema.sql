@@ -1,10 +1,34 @@
-DROP TABLE IF EXISTS book;
-CREATE TABLE book(id BIGSERIAL PRIMARY KEY, title VARCHAR(255) NOT NULL);
-DROP TABLE IF EXISTS author;
-CREATE TABLE author(id BIGSERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL);
-DROP TABLE IF EXISTS book_author_link;
-CREATE TABLE book_author_link(book_id BIGINT NOT NULL, author_id BIGINT NOT NULL, PRIMARY KEY(book_id, author_id));
-DROP TABLE IF EXISTS genre;
-CREATE TABLE genre(id BIGSERIAL PRIMARY KEY, name VARCHAR(255) NOT NULL);
-DROP TABLE IF EXISTS book_genre_link;
-CREATE TABLE book_genre_link(book_id BIGINT NOT NULL, genre_id BIGINT NOT NULL, PRIMARY KEY(book_id, genre_id));
+drop table if exists book;
+create table book(
+    id bigserial,
+    title varchar(255) not null,
+    primary key (id)
+);
+
+drop table if exists author;
+create table author(
+    id bigserial,
+    name varchar(255) not null,
+    primary key (id)
+);
+
+drop table if exists book_author_link;
+create table book_author_link(
+    book_id bigint not null references book (id) on delete cascade,
+    author_id bigint not null references author (id),
+    primary key (book_id, author_id)
+);
+
+drop table if exists genre;
+create table genre(
+    id bigserial,
+    name varchar(255) not null,
+    primary key (id)
+);
+
+drop table if exists book_genre_link;
+create table book_genre_link(
+    book_id bigint not null references book (id) on delete cascade,
+    genre_id bigint not null references genre (id),
+    primary key (book_id, genre_id)
+);
