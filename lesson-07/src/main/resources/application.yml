@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    initialization-mode: always
+    schema: schema.sql
+    data: data.sql
