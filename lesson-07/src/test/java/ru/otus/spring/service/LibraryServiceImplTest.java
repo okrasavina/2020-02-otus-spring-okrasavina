@@ -8,8 +8,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import ru.otus.spring.config.LocaleConfig;
 import ru.otus.spring.domain.Author;
+import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.dto.LibraryBook;
 
@@ -18,7 +18,6 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -49,7 +48,7 @@ class LibraryServiceImplTest {
     @MockBean
     private MessageSource messageSource;
     @MockBean
-    private LocaleConfig localeConfig;
+    private LocaleService localeService;
     @MockBean
     private BookService bookService;
 
@@ -57,8 +56,8 @@ class LibraryServiceImplTest {
 
     @BeforeEach
     void setUp() {
-        service = new LibraryServiceImpl(localeConfig, messageSource, bookService);
-        given(localeConfig.getCurrentLocale()).willReturn(Locale.ENGLISH);
+        service = new LibraryServiceImpl(localeService, messageSource, bookService);
+        given(localeService.getCurrentLocale()).willReturn(Locale.ENGLISH);
     }
 
     @DisplayName("добавлять книгу в библотеку")
@@ -75,8 +74,10 @@ class LibraryServiceImplTest {
     @DisplayName("возвращать список всех книг")
     @Test
     void shouldReturnExceptedListAllBooks() {
-        LibraryBook libraryBook = new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                List.of(FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME), List.of(DEFAULT_GENRE_NAME));
+        List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
+                new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
+        LibraryBook libraryBook = new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_GENRE_NAME),
+                authors, List.of(new Genre(DEFAULT_GENRE_NAME)));
         given(bookService.getListBook()).willReturn(List.of(libraryBook));
 
         List<String> listBook = service.getListBook();
@@ -100,8 +101,10 @@ class LibraryServiceImplTest {
     @DisplayName("возвращать книгу по номеру")
     @Test
     void shouldReturnExceptedBookByNumber() {
-        LibraryBook libraryBook = new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                List.of(FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME), List.of(DEFAULT_GENRE_NAME));
+        List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
+                new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
+        LibraryBook libraryBook = new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, List.of(new Genre(DEFAULT_GENRE_NAME)));
         given(bookService.getBookByNumber(DEFAULT_BOOK_ID)).willReturn(libraryBook.toString());
 
         String bookActual = service.getBookByNumber(DEFAULT_BOOK_ID);
@@ -126,8 +129,10 @@ class LibraryServiceImplTest {
     @DisplayName("возвращать список книг по имени автора")
     @Test
     void shouldReturnExceptedListBooksByAuthorName() {
-        LibraryBook libraryBook = new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                List.of(FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME), List.of(DEFAULT_GENRE_NAME));
+        List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
+                new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
+        LibraryBook libraryBook = new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, List.of(new Genre(DEFAULT_GENRE_NAME)));
         given(bookService.getListBookByAuthorName(FIRST_AUTHOR_NAME)).willReturn(List.of(libraryBook));
 
         List<String> listActual = service.getListBookByAuthorName(FIRST_AUTHOR_NAME);
@@ -151,8 +156,10 @@ class LibraryServiceImplTest {
     @DisplayName("возвращать список книг по имени жанра")
     @Test
     void shouldReturnExceptedListBooksByGenreName() {
-        LibraryBook libraryBook = new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                List.of(FIRST_AUTHOR_NAME, SECOND_AUTHOR_NAME), List.of(DEFAULT_GENRE_NAME));
+        List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
+                new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
+        LibraryBook libraryBook = new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, List.of(new Genre(DEFAULT_GENRE_NAME)));
         given(bookService.getListBookByGenreName(DEFAULT_GENRE_NAME)).willReturn(List.of(libraryBook));
 
         List<String> listActual = service.getListBookByGenreName(DEFAULT_GENRE_NAME);

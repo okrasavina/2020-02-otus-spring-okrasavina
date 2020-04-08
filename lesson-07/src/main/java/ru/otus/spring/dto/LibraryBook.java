@@ -1,6 +1,9 @@
 package ru.otus.spring.dto;
 
 import lombok.*;
+import ru.otus.spring.domain.Author;
+import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.Genre;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,21 +13,18 @@ import java.util.stream.Collectors;
 @Getter
 @EqualsAndHashCode
 public class LibraryBook {
-    private final String bookTitle;
+    private final Book book;
 
     @Setter
-    private long bookNumber;
+    private List<Author> authors;
 
     @Setter
-    private List<String> authorNames;
-
-    @Setter
-    private List<String> genreNames;
+    private List<Genre> genres;
 
     @Override
     public String toString() {
-        return String.format("LibraryBook %d { bookTitle = '%s'; authorNames = %s; genreNames = %s}", bookNumber,
-                        bookTitle, authorNames.stream().collect(Collectors.joining(", ")),
-                        genreNames.stream().collect(Collectors.joining(", ")));
+        return String.format("LibraryBook %d { bookTitle = '%s'; authorNames = %s; genreNames = %s}", book.getId(),
+                        book.getTitle(), authors.stream().map(Author::getName).collect(Collectors.joining(", ")),
+                        genres.stream().map(Genre::getName).collect(Collectors.joining(", ")));
     }
 }

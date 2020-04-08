@@ -3,7 +3,7 @@ package ru.otus.spring.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.config.LocaleConfig;
+import ru.otus.spring.domain.Book;
 import ru.otus.spring.dto.LibraryBook;
 
 import java.util.List;
@@ -12,14 +12,14 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class LibraryServiceImpl implements LibraryService {
-    private final LocaleConfig localeConfig;
+    private final LocaleService localeService;
     private final MessageSource messageSource;
     private final BookService bookService;
 
     @Override
     public String createLibraryBook(String bookTitle, List<String> authorNames, List<String> genreNames) {
-        bookService.createBook(new LibraryBook(bookTitle, 1L, authorNames, genreNames));
-        return messageSource.getMessage("book.create", null, localeConfig.getCurrentLocale());
+        bookService.createBook(new LibraryBook(new Book(bookTitle)), authorNames, genreNames);
+        return messageSource.getMessage("book.create", null, localeService.getCurrentLocale());
     }
 
     @Override
@@ -34,7 +34,7 @@ public class LibraryServiceImpl implements LibraryService {
         bookService.deleteBookById(bookId);
 
         return messageSource.getMessage("book.delete", new String[]{String.valueOf(bookId)},
-                localeConfig.getCurrentLocale());
+                localeService.getCurrentLocale());
     }
 
     @Override

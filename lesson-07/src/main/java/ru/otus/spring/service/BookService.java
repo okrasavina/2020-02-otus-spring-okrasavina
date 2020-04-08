@@ -5,7 +5,7 @@ import ru.otus.spring.dto.LibraryBook;
 import java.util.List;
 
 public interface BookService {
-    void createBook(LibraryBook libraryBook);
+    void createBook(LibraryBook libraryBook, List<String> authorNames, List<String> genreNames);
 
     List<LibraryBook> getListBook();
 

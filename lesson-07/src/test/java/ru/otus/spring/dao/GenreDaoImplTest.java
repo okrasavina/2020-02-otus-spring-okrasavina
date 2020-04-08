@@ -50,7 +50,7 @@ class GenreDaoImplTest {
     @Test
     void shouldCorrectInsertGenre() {
         Genre genreExpected = new Genre(INSERTED_GENRE_ID, INSERTED_GENRE_NAME);
-        Genre genreInserted = dao.insert(INSERTED_GENRE_NAME);
+        Genre genreInserted = dao.insert(new Genre(INSERTED_GENRE_NAME));
 
         assertThat(genreInserted).isEqualToComparingFieldByField(genreExpected);
     }
@@ -81,7 +81,7 @@ class GenreDaoImplTest {
     @Test
     void shouldDeleteGenreWithoutBooks() {
         List<Genre> beforeInsert = dao.getAll();
-        dao.insert(INSERTED_GENRE_NAME);
+        dao.insert(new Genre(INSERTED_GENRE_NAME));
         dao.deleteGenresWithoutBooks();
         List<Genre> afterDelete = dao.getAll();
 

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookDao {
-    Book insert(String titleBook, List<Author> authors, List<Genre> genres);
+    Book insert(Book book, List<Author> authors, List<Genre> genres);
 
     List<Book> getAll();
 

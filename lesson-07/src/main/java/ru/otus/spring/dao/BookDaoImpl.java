@@ -1,6 +1,7 @@
 package ru.otus.spring.dao;
 
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
@@ -25,17 +26,17 @@ public class BookDaoImpl implements BookDao {
     private final NamedParameterJdbcOperations jdbcOperations;
 
     @Override
-    public Book insert(String titleBook, List<Author> authors, List<Genre> genres) {
-        MapSqlParameterSource params = new MapSqlParameterSource();
-        params.addValue("title", titleBook);
+    public Book insert(Book book, List<Author> authors, List<Genre> genres) {
+        val params = new MapSqlParameterSource();
+        params.addValue("title", book.getTitle());
         KeyHolder kh = new GeneratedKeyHolder();
         jdbcOperations.update("insert into book(title) values(:title)",
                 params, kh);
 
         insertBookAuthorLink(kh.getKey().longValue(), authors);
         insertBookGenreLink(kh.getKey().longValue(), genres);
-
-        return new Book(kh.getKey().longValue(), titleBook);
+        book.setId(kh.getKey().longValue());
+        return book;
     }
 
     @Override
@@ -56,13 +57,13 @@ public class BookDaoImpl implements BookDao {
 
     @Override
     public List<Book> getAllByAuthorId(long authorId) {
-        return jdbcOperations.query("select b.* from book_author_link l join book b on b.id = l.book_id where author_id = :id",
+        return jdbcOperations.query("select b.* from book_author l join book b on b.id = l.book_id where author_id = :id",
                 Map.of("id", authorId), new BookMapper());
     }
 
     @Override
     public List<Book> getAllByGenreId(long genreId) {
-        return jdbcOperations.query("select b.* from book_genre_link l join book b on b.id = l.book_id where genre_id = :id",
+        return jdbcOperations.query("select b.* from book_genre l join book b on b.id = l.book_id where genre_id = :id",
                 Map.of("id", genreId), new BookMapper());
     }
 
@@ -71,7 +72,7 @@ public class BookDaoImpl implements BookDao {
         for (Genre genre : genres) {
             params[genres.indexOf(genre)] = Map.of("book_id", bookId, "genre_id", genre.getId());
         }
-        jdbcOperations.batchUpdate("insert into book_genre_link(book_id, genre_id) values(:book_id, :genre_id)",
+        jdbcOperations.batchUpdate("insert into book_genre(book_id, genre_id) values(:book_id, :genre_id)",
                 params);
     }
 
@@ -80,7 +81,7 @@ public class BookDaoImpl implements BookDao {
         for (Author author : authors) {
             params[authors.indexOf(author)] = Map.of("book_id", bookId, "author_id", author.getId());
         }
-        jdbcOperations.batchUpdate("insert into book_author_link(book_id, author_id) values(:book_id, :author_id)",
+        jdbcOperations.batchUpdate("insert into book_author(book_id, author_id) values(:book_id, :author_id)",
                 params);
     }
 

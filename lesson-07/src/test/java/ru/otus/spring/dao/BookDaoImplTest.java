@@ -32,7 +32,7 @@ class BookDaoImplTest {
     @Test
     void shouldInsertBook() {
         Book expected = new Book(INSERTED_BOOK_ID, INSERTED_BOOK_NAME);
-        Book insertedBook = dao.insert(INSERTED_BOOK_NAME, new ArrayList<>(), new ArrayList<>());
+        Book insertedBook = dao.insert(new Book(INSERTED_BOOK_NAME), new ArrayList<>(), new ArrayList<>());
 
         assertThat(insertedBook).isEqualToComparingFieldByField(expected);
     }

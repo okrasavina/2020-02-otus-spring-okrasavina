@@ -1,15 +1,13 @@
 package ru.otus.spring.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @RequiredArgsConstructor
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
 public class Book {
+    @Setter
     private long id;
     private final String title;
 }

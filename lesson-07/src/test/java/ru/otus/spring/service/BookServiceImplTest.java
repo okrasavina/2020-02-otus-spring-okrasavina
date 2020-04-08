@@ -13,8 +13,7 @@ import ru.otus.spring.dao.GenreDao;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.dto.AuthorNotFoundException;
-import ru.otus.spring.dto.GenreNotFoundException;
+import ru.otus.spring.dto.EntityNotFoundException;
 import ru.otus.spring.dto.LibraryBook;
 
 import java.util.List;
@@ -24,7 +23,6 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
@@ -70,12 +68,16 @@ class BookServiceImplTest {
     @Test
     void shouldCreateNewBook() {
         Book bookExpected = new Book(INSERTED_BOOK_ID, INSERTED_BOOK_NAME);
-        LibraryBook libraryBook = new LibraryBook(INSERTED_BOOK_NAME, INSERTED_BOOK_ID, List.of(INSERTED_AUTHOR_NAME),
-                List.of(INSERTED_GENRE_NAME));
-        given(bookDao.insert(eq(INSERTED_BOOK_NAME), anyList(), anyList())).willReturn(bookExpected);
-        service.createBook(libraryBook);
+        List<Author> authors = List.of(new Author(INSERTED_AUTHOR_NAME));
+        List<Genre> genres = List.of(new Genre(INSERTED_GENRE_NAME));
 
-        verify(bookDao, times(1)).insert(eq(INSERTED_BOOK_NAME), anyList(), anyList());
+        LibraryBook libraryBook = new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME), authors, genres);
+
+        given(bookDao.insert(any(Book.class), anyList(), anyList())).willReturn(bookExpected);
+        service.createBook(libraryBook, authors.stream().map(Author::getName).collect(Collectors.toList()),
+                List.of(INSERTED_GENRE_NAME));
+
+        verify(bookDao, times(1)).insert(any(Book.class), anyList(), anyList());
     }
 
     @DisplayName("возвращать список всех книг в БД")
@@ -85,9 +87,8 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        List<LibraryBook> expected = List.of(new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                authors.stream().map(Author::getName).collect(Collectors.toList()),
-                genres.stream().map(Genre::getName).collect(Collectors.toList())));
+        List<LibraryBook> expected = List.of(new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, genres));
 
         given(bookDao.getAll()).willReturn(books);
         given(authorDao.getListByBookId(DEFAULT_BOOK_ID)).willReturn(authors);
@@ -118,9 +119,8 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        String expected = new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                authors.stream().map(Author::getName).collect(Collectors.toList()),
-                genres.stream().map(Genre::getName).collect(Collectors.toList())).toString();
+        String expected = new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, genres).toString();
 
         given(bookDao.getById(DEFAULT_BOOK_ID)).willReturn(Optional.of(book));
         given(authorDao.getListByBookId(DEFAULT_BOOK_ID)).willReturn(authors);
@@ -155,9 +155,8 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        List<LibraryBook> expected = List.of(new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                authors.stream().map(Author::getName).collect(Collectors.toList()),
-                genres.stream().map(Genre::getName).collect(Collectors.toList())));
+        List<LibraryBook> expected = List.of(new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, genres));
 
         given(authorDao.getByName(FIRST_AUTHOR_NAME)).willReturn(Optional.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME)));
         given(bookDao.getAllByAuthorId(FIRST_AUTHOR_ID)).willReturn(books);
@@ -192,9 +191,8 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        List<LibraryBook> expected = List.of(new LibraryBook(DEFAULT_BOOK_NAME, DEFAULT_BOOK_ID,
-                authors.stream().map(Author::getName).collect(Collectors.toList()),
-                genres.stream().map(Genre::getName).collect(Collectors.toList())));
+        List<LibraryBook> expected = List.of(new LibraryBook(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME),
+                authors, genres));
 
         given(genreDao.getByName(DEFAULT_GENRE_NAME)).willReturn(Optional.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME)));
         given(bookDao.getAllByGenreId(DEFAULT_GENRE_ID)).willReturn(books);
@@ -213,9 +211,9 @@ class BookServiceImplTest {
     @Test
     void shouldReturnAuthorNotFoundException() {
         given(authorDao.getByName(ERROR_AUTHOR_NAME)).willReturn(Optional.empty());
-        Throwable exception = new AuthorNotFoundException(ERROR_AUTHOR_NAME);
+        Throwable exception = new EntityNotFoundException(Author.class, "name", ERROR_AUTHOR_NAME);
 
-        assertThatThrownBy(() -> service.getListBookByAuthorName(ERROR_AUTHOR_NAME)).isInstanceOf(AuthorNotFoundException.class)
+        assertThatThrownBy(() -> service.getListBookByAuthorName(ERROR_AUTHOR_NAME)).isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(exception.getMessage());
     }
 
@@ -223,9 +221,9 @@ class BookServiceImplTest {
     @Test
     void shouldReturnGenreNotFoundException() {
         given(genreDao.getByName(ERROR_GENRE_NAME)).willReturn(Optional.empty());
-        Throwable exception = new GenreNotFoundException(ERROR_GENRE_NAME);
+        Throwable exception = new EntityNotFoundException(Genre.class, "name", ERROR_GENRE_NAME);
 
-        assertThatThrownBy(() -> service.getListBookByGenreName(ERROR_GENRE_NAME)).isInstanceOf(GenreNotFoundException.class)
+        assertThatThrownBy(() -> service.getListBookByGenreName(ERROR_GENRE_NAME)).isInstanceOf(EntityNotFoundException.class)
                 .hasMessage(exception.getMessage());
     }
 }

@@ -51,10 +51,10 @@ class AuthorDaoImplTest {
     @DisplayName("корректно добавлять Author в БД")
     @Test
     void shouldCorrectInsertAuthor() {
-        Author authorExpected = new Author(INSERTED_AUTHOR_ID, INSERTED_AUTHOR_NAME);
-        Author authorActual = dao.insert(INSERTED_AUTHOR_NAME);
+        Author authorExpected = new Author(INSERTED_AUTHOR_NAME);
+        dao.insert(authorExpected);
 
-        assertThat(authorActual).isEqualToComparingFieldByField(authorExpected);
+        assertThat(authorExpected.getId()).isEqualTo(INSERTED_AUTHOR_ID);
     }
 
     @DisplayName("возвращать список авторов по id книги")
@@ -85,7 +85,7 @@ class AuthorDaoImplTest {
     @Test
     void shouldDeleteAuthorWithoutBooks() {
         List<Author> beforeInsert = dao.getAll();
-        dao.insert(INSERTED_AUTHOR_NAME);
+        dao.insert(new Author(INSERTED_AUTHOR_NAME));
         dao.deleteAuthorsWithoutBooks();
         List<Author> afterDelete = dao.getAll();
 
