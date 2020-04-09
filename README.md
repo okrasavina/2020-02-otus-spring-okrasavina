@@ -6,3 +6,4 @@
 /lesson-02 - Конфигурирование Spring-приложений 
 /lesson-04 - "Чёрная магия" Spring Boot 
 /lesson-05 - Продвинутая конфигурация Spring-приложений
+/lesson-07 - DAO на Spring JDBC
