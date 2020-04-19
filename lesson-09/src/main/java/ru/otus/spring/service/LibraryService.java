@@ -1,6 +1,6 @@
 package ru.otus.spring.service;
 
-import ru.otus.spring.domain.LibraryBook;
+import ru.otus.spring.domain.Book;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public interface LibraryService {
 
     String addCommentToTheBook(String textComment);
 
-    LibraryBook getBook();
+    Book getBook();
 
     String returnTheBook();
 

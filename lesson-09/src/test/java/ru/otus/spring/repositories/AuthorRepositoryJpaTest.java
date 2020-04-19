@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Author;
 
 import java.util.ArrayList;
@@ -15,8 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jpa для работы с авторами книг должен")
 @DataJpaTest
-@Import(AuthorRepositoryJpaImpl.class)
-class AuthorRepositoryJpaImplTest {
+@Import(AuthorRepositoryJpa.class)
+@Transactional()
+class AuthorRepositoryJpaTest {
 
     public static final String FIRST_AUTHOR_NAME = "Илья Ильф";
     public static final long FIRST_AUTHOR_ID = 1L;
@@ -27,7 +29,7 @@ class AuthorRepositoryJpaImplTest {
     public static final String ERROR_AUTHOR_NAME = "Валентин Пикуль";
 
     @Autowired
-    private AuthorRepositoryJpaImpl repo;
+    private AuthorRepositoryJpa repo;
 
     @DisplayName("возвращать список всех авторов")
     @Test

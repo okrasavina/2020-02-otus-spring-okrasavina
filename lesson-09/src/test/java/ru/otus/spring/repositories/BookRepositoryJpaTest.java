@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.domain.LibraryBook;
+import ru.otus.spring.domain.Book;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,8 +18,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий на основе Jpa для работы с книгами должен")
 @DataJpaTest
-@Import(LibraryBookRepositoryJpaImpl.class)
-class LibraryBookRepositoryJpaImplTest {
+@Import(BookRepositoryJpa.class)
+class BookRepositoryJpaTest {
 
     public static final String INSERTED_BOOK_NAME = "Мертвые души";
     public static final String INSERTED_AUTHOR_NAME = "Николай Гоголь";
@@ -34,7 +34,7 @@ class LibraryBookRepositoryJpaImplTest {
     public static final String DEFAULT_BOOK_NAME = "12 стульев";
 
     @Autowired
-    private LibraryBookRepositoryJpaImpl bookRepo;
+    private BookRepositoryJpa bookRepo;
 
     @Autowired
     private TestEntityManager em;
@@ -44,12 +44,12 @@ class LibraryBookRepositoryJpaImplTest {
     void shouldCorrectSaveAllBookInfo() {
         List<Author> authors = List.of(new Author(0, INSERTED_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(0, INSERTED_GENRE_NAME));
-        LibraryBook book = new LibraryBook(0, INSERTED_BOOK_NAME, authors, genres, List.of());
+        Book book = new Book(0, INSERTED_BOOK_NAME, authors, genres, List.of());
 
         bookRepo.save(book);
         assertThat(book.getId()).isGreaterThan(0);
 
-        LibraryBook actualBook = em.find(LibraryBook.class, book.getId());
+        Book actualBook = em.find(Book.class, book.getId());
         assertThat(actualBook).isNotNull().isEqualToComparingFieldByField(book);
     }
 
@@ -58,7 +58,7 @@ class LibraryBookRepositoryJpaImplTest {
     void shouldReturnListAllLibraryBooks() {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME), new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        LibraryBook book = new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
+        Book book = new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
         val listExpected = List.of(book);
 
         val listActual = bookRepo.getAll();
@@ -77,7 +77,7 @@ class LibraryBookRepositoryJpaImplTest {
         Author author = new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME);
         List<Author> authors = List.of(author, new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        LibraryBook book = new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
+        Book book = new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
         val listExpected = List.of(book);
 
         val listActual = bookRepo.getAllByAuthor(author);
@@ -93,12 +93,12 @@ class LibraryBookRepositoryJpaImplTest {
     @DisplayName("удалять книгу по ее идентификатору")
     @Test
     void shouldDeleteLibraryBookById() {
-        LibraryBook book = em.find(LibraryBook.class, DEFAULT_BOOK_ID);
+        Book book = em.find(Book.class, DEFAULT_BOOK_ID);
         assertThat(book).isNotNull();
         em.detach(book);
 
         bookRepo.deleteById(DEFAULT_BOOK_ID);
-        LibraryBook bookDeleted = em.find(LibraryBook.class, DEFAULT_BOOK_ID);
+        Book bookDeleted = em.find(Book.class, DEFAULT_BOOK_ID);
         assertThat(bookDeleted).isNull();
     }
 
@@ -109,8 +109,8 @@ class LibraryBookRepositoryJpaImplTest {
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
 
-        LibraryBook expected = new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
-        Optional<LibraryBook> actual = bookRepo.getById(DEFAULT_BOOK_ID);
+        Book expected = new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
+        Optional<Book> actual = bookRepo.getById(DEFAULT_BOOK_ID);
 
         assertThat(actual.isPresent()).isEqualTo(true);
         assertThat(actual.get()).matches(b -> b.getId() == expected.getId())

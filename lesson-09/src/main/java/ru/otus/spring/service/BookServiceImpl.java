@@ -6,12 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.domain.LibraryBook;
+import ru.otus.spring.domain.Book;
 import ru.otus.spring.dto.EntityNotFoundException;
-import ru.otus.spring.repositories.AuthorRepositoryJpa;
-import ru.otus.spring.repositories.CommentRepositoryJpa;
-import ru.otus.spring.repositories.GenreRepositoryJpa;
-import ru.otus.spring.repositories.LibraryBookRepositoryJpa;
+import ru.otus.spring.repositories.AuthorRepository;
+import ru.otus.spring.repositories.CommentRepository;
+import ru.otus.spring.repositories.GenreRepository;
+import ru.otus.spring.repositories.BookRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Service
 public class BookServiceImpl implements BookService {
-    private final LibraryBookRepositoryJpa bookRepo;
-    private final AuthorRepositoryJpa authorRepo;
-    private final GenreRepositoryJpa genreRepo;
-    private final CommentRepositoryJpa commentRepo;
+    private final BookRepository bookRepo;
+    private final AuthorRepository authorRepo;
+    private final GenreRepository genreRepo;
+    private final CommentRepository commentRepo;
 
     @Override
-    public void createBook(LibraryBook libraryBook) {
+    public void createBook(Book libraryBook) {
         List<Author> authors = getListAuthorsWithActualId(libraryBook);
         List<Genre> genres = getListGenresWithActualId(libraryBook);
         libraryBook.setAuthors(List.of());
@@ -37,7 +37,7 @@ public class BookServiceImpl implements BookService {
         bookRepo.save(libraryBook);
     }
 
-    private List<Genre> getListGenresWithActualId(LibraryBook book) {
+    private List<Genre> getListGenresWithActualId(Book book) {
         List<Genre> genres = book.getGenres();
         List<Genre> genresExisting = genreRepo.findListByListName(genres.stream().map(Genre::getName).collect(Collectors.toList()));
         genres.forEach(g -> {
@@ -51,7 +51,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<LibraryBook> getListBook() {
+    public List<Book> getListBook() {
         return bookRepo.getAll();
     }
 
@@ -63,9 +63,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public LibraryBook getBookByNumber(long bookId) {
+    public Book getBookByNumber(long bookId) {
         return bookRepo.getById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException(LibraryBook.class, "number", Long.toString(bookId)));
+                .orElseThrow(() -> new EntityNotFoundException(Book.class, "number", Long.toString(bookId)));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<LibraryBook> getListBookByAuthorName(String authorName) {
+    public List<Book> getListBookByAuthorName(String authorName) {
         Author author = authorRepo.getByName(authorName)
                 .orElseThrow(() -> new EntityNotFoundException(Author.class, "name", authorName));
         return bookRepo.getAllByAuthor(author);
@@ -88,25 +88,25 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public List<LibraryBook> getListBookByGenreName(String genreName) {
+    public List<Book> getListBookByGenreName(String genreName) {
         Genre genre = genreRepo.getByName(genreName)
                 .orElseThrow(() -> new EntityNotFoundException(Genre.class, "name", genreName));
         return bookRepo.getAllByGenre(genre);
     }
 
     @Override
-    public long addCommentToTheBook(LibraryBook book, String textComment) {
+    public long addCommentToTheBook(Book book, String textComment) {
         Comment commentAdded = new Comment(0, textComment, book);
         commentRepo.save(commentAdded);
         return book.getId();
     }
 
     @Override
-    public void clearCommentsOnTheBook(LibraryBook book) {
+    public void clearCommentsOnTheBook(Book book) {
         commentRepo.deleteCommentsByBook(book);
     }
 
-    private List<Author> getListAuthorsWithActualId(LibraryBook book) {
+    private List<Author> getListAuthorsWithActualId(Book book) {
         List<Author> authors = book.getAuthors();
         List<Author> authorsExisting = authorRepo.findListByListName(authors.stream().map(Author::getName).collect(Collectors.toList()));
         authors.forEach(a -> {

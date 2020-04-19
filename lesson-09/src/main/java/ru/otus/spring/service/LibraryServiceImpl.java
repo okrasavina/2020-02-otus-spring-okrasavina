@@ -6,7 +6,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.domain.LibraryBook;
+import ru.otus.spring.domain.Book;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,11 +18,11 @@ public class LibraryServiceImpl implements LibraryService {
     private final MessageSource messageSource;
     private final BookService bookService;
     @Getter
-    private LibraryBook book;
+    private Book book;
 
     @Override
     public String createLibraryBook(String bookTitle, List<String> authorNames, List<String> genreNames) {
-        bookService.createBook(new LibraryBook(0, bookTitle,
+        bookService.createBook(new Book(0, bookTitle,
                 authorNames.stream().map(s -> new Author(0, s)).collect(Collectors.toList()),
                 genreNames.stream().map(s -> new Genre(0, s)).collect(Collectors.toList()), List.of()));
         return messageSource.getMessage("book.create", null, localeService.getCurrentLocale());
@@ -30,9 +30,9 @@ public class LibraryServiceImpl implements LibraryService {
 
     @Override
     public List<String> getListBook() {
-        List<LibraryBook> books = bookService.getListBook();
+        List<Book> books = bookService.getListBook();
 
-        return books.stream().map(LibraryBook::toString).collect(Collectors.toList());
+        return books.stream().map(Book::toString).collect(Collectors.toList());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public List<String> getListBookByAuthorName(String authorName) {
         return bookService.getListBookByAuthorName(authorName)
-                .stream().map(LibraryBook::toString).collect(Collectors.toList());
+                .stream().map(Book::toString).collect(Collectors.toList());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public List<String> getListBookByGenreName(String genreName) {
         return bookService.getListBookByGenreName(genreName)
-                .stream().map(LibraryBook::toString).collect(Collectors.toList());
+                .stream().map(Book::toString).collect(Collectors.toList());
     }
 
     @Override

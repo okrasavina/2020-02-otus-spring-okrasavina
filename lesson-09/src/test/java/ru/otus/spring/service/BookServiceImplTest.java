@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Comment;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.domain.LibraryBook;
+import ru.otus.spring.domain.Book;
 import ru.otus.spring.dto.EntityNotFoundException;
-import ru.otus.spring.repositories.AuthorRepositoryJpa;
-import ru.otus.spring.repositories.CommentRepositoryJpa;
-import ru.otus.spring.repositories.GenreRepositoryJpa;
-import ru.otus.spring.repositories.LibraryBookRepositoryJpa;
+import ru.otus.spring.repositories.AuthorRepository;
+import ru.otus.spring.repositories.CommentRepository;
+import ru.otus.spring.repositories.GenreRepository;
+import ru.otus.spring.repositories.BookRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,7 +45,6 @@ class BookServiceImplTest {
     public static final String ERROR_AUTHOR_NAME = "Агния Барто";
     public static final String ERROR_GENRE_NAME = "Драма";
     public static final String DEFAULT_COMMENT_TEXT = "Это очень интересная книга.";
-    private static final long DEFAULT_COMMENT_ID = 1L;
 
     @Configuration
     @ComponentScan("ru.otus.spring.service")
@@ -53,13 +52,13 @@ class BookServiceImplTest {
     }
 
     @MockBean
-    private LibraryBookRepositoryJpa bookRepo;
+    private BookRepository bookRepo;
     @MockBean
-    private AuthorRepositoryJpa authorRepo;
+    private AuthorRepository authorRepo;
     @MockBean
-    private GenreRepositoryJpa genreRepo;
+    private GenreRepository genreRepo;
     @MockBean
-    private CommentRepositoryJpa commentRepo;
+    private CommentRepository commentRepo;
 
     private BookServiceImpl service;
 
@@ -74,7 +73,7 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(0, INSERTED_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(0, INSERTED_GENRE_NAME));
 
-        LibraryBook libraryBook = new LibraryBook(INSERTED_BOOK_ID, INSERTED_BOOK_NAME, authors, genres, List.of());
+        Book libraryBook = new Book(INSERTED_BOOK_ID, INSERTED_BOOK_NAME, authors, genres, List.of());
 
         given(bookRepo.save(libraryBook)).willReturn(libraryBook);
         service.createBook(libraryBook);
@@ -88,11 +87,11 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        List<LibraryBook> expected = List.of(new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of()));
+        List<Book> expected = List.of(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of()));
 
         given(bookRepo.getAll()).willReturn(expected);
 
-        List<LibraryBook> actual = service.getListBook();
+        List<Book> actual = service.getListBook();
 
         assertThat(actual).hasSameElementsAs(expected);
         verify(bookRepo, times(1)).getAll();
@@ -112,11 +111,11 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        LibraryBook book = new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
+        Book book = new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
 
         given(bookRepo.getById(DEFAULT_BOOK_ID)).willReturn(Optional.of(book));
 
-        LibraryBook actual = service.getBookByNumber(DEFAULT_BOOK_ID);
+        Book actual = service.getBookByNumber(DEFAULT_BOOK_ID);
 
         assertThat(actual.toString()).isEqualTo(book.toString());
         verify(bookRepo, times(1)).getById(DEFAULT_BOOK_ID);
@@ -143,13 +142,13 @@ class BookServiceImplTest {
         Author author = new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME);
         List<Author> authors = List.of(author, new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        List<LibraryBook> expected = List.of(new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME,
+        List<Book> expected = List.of(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME,
                 authors, genres, List.of()));
 
         given(authorRepo.getByName(FIRST_AUTHOR_NAME)).willReturn(Optional.of(author));
         given(bookRepo.getAllByAuthor(author)).willReturn(expected);
 
-        List<LibraryBook> actual = service.getListBookByAuthorName(FIRST_AUTHOR_NAME);
+        List<Book> actual = service.getListBookByAuthorName(FIRST_AUTHOR_NAME);
 
         verify(authorRepo, times(1)).getByName(FIRST_AUTHOR_NAME);
         verify(bookRepo, times(1)).getAllByAuthor(author);
@@ -176,12 +175,12 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(genre);
-        List<LibraryBook> expected = List.of(new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of()));
+        List<Book> expected = List.of(new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of()));
 
         given(genreRepo.getByName(DEFAULT_GENRE_NAME)).willReturn(Optional.of(genre));
         given(bookRepo.getAllByGenre(genre)).willReturn(expected);
 
-        List<LibraryBook> actual = service.getListBookByGenreName(DEFAULT_GENRE_NAME);
+        List<Book> actual = service.getListBookByGenreName(DEFAULT_GENRE_NAME);
 
         verify(genreRepo, times(1)).getByName(DEFAULT_GENRE_NAME);
         verify(bookRepo, times(1)).getAllByGenre(genre);
@@ -214,7 +213,7 @@ class BookServiceImplTest {
         List<Author> authors = List.of(new Author(FIRST_AUTHOR_ID, FIRST_AUTHOR_NAME),
                 new Author(SECOND_AUTHOR_ID, SECOND_AUTHOR_NAME));
         List<Genre> genres = List.of(new Genre(DEFAULT_GENRE_ID, DEFAULT_GENRE_NAME));
-        LibraryBook book = new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
+        Book book = new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, authors, genres, List.of());
 
         Comment comment = new Comment(0, DEFAULT_COMMENT_TEXT, book);
 
@@ -227,7 +226,7 @@ class BookServiceImplTest {
     @DisplayName("удалять комментарии по книге")
     @Test
     void shouldDeleteCommentsByBook() {
-        LibraryBook book = new LibraryBook(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, List.of(), List.of(), List.of());
+        Book book = new Book(DEFAULT_BOOK_ID, DEFAULT_BOOK_NAME, List.of(), List.of(), List.of());
         service.clearCommentsOnTheBook(book);
 
         verify(commentRepo, times(1)).deleteCommentsByBook(book);
