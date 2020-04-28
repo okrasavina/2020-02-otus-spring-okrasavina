@@ -23,8 +23,8 @@ public class LibraryServiceImpl implements LibraryService {
     @Override
     public String createLibraryBook(String bookTitle, List<String> authorNames, List<String> genreNames) {
         bookService.createBook(new Book(0, bookTitle,
-                authorNames.stream().map(s -> new Author(0, s)).collect(Collectors.toList()),
-                genreNames.stream().map(s -> new Genre(0, s)).collect(Collectors.toList()), List.of()));
+                authorNames.stream().map(s -> new Author(s)).collect(Collectors.toList()),
+                genreNames.stream().map(s -> new Genre(s)).collect(Collectors.toList()), List.of()));
         return messageSource.getMessage("book.create", null, localeService.getCurrentLocale());
     }
 

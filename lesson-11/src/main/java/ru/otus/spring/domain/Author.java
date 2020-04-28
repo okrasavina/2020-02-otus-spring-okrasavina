@@ -1,12 +1,8 @@
 package ru.otus.spring.domain;
 
 import lombok.*;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -22,6 +18,11 @@ public class Author {
 
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
+    public Author(String name) {
+        this.id = 0;
+        this.name = name;
+    }
 
     @Override
     public String toString() {

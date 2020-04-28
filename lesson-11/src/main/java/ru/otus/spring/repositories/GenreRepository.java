@@ -9,9 +9,9 @@ import ru.otus.spring.domain.Genre;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 public interface GenreRepository extends JpaRepository<Genre, Long> {
 
-    @Transactional(readOnly = true)
     Optional<Genre> findByName(String genreName);
 
     @Modifying
@@ -19,6 +19,5 @@ public interface GenreRepository extends JpaRepository<Genre, Long> {
     @Query("delete from Genre g where not exists (select b from Book b where g member of b.genres)")
     void deleteGenreWithoutBooks();
 
-    @Transactional(readOnly = true)
     List<Genre> findByNameIn(List<String> names);
 }

@@ -10,9 +10,9 @@ import ru.otus.spring.domain.Author;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional(readOnly = true)
 public interface AuthorRepository extends JpaRepository<Author, Long> {
 
-    @Transactional(readOnly = true)
     Optional<Author> findByName(String authorName);
 
     @Transactional
@@ -20,6 +20,5 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     @Query("delete from Author a where not exists (select b from Book b where a member of b.authors)")
     void deleteAuthorWithoutBooks();
 
-    @Transactional(readOnly = true)
     List<Author> findByNameIn(List<String> names);
 }

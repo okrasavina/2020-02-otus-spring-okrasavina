@@ -65,8 +65,8 @@ class BookServiceImplTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shouldCreateNewBook() {
-        List<Author> authors = List.of(new Author(0, INSERTED_AUTHOR_NAME));
-        List<Genre> genres = List.of(new Genre(0, INSERTED_GENRE_NAME));
+        List<Author> authors = List.of(new Author(INSERTED_AUTHOR_NAME));
+        List<Genre> genres = List.of(new Genre(INSERTED_GENRE_NAME));
 
         Book libraryBook = new Book(INSERTED_BOOK_ID, INSERTED_BOOK_NAME, authors, genres, List.of());
 

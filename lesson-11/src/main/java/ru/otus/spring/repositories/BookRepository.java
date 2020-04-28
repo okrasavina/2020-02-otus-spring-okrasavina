@@ -8,12 +8,11 @@ import ru.otus.spring.domain.Book;
 
 import java.util.List;
 
+@Transactional(readOnly = true)
 public interface BookRepository extends JpaRepository<Book, Long> {
 
-    @Transactional(readOnly = true)
     List<Book> findAllByAuthorsContaining(Author author);
 
-    @Transactional(readOnly = true)
     List<Book> findAllByGenresContaining(Genre genre);
 
 }
