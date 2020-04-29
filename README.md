@@ -7,4 +7,5 @@
 /lesson-04 - "Чёрная магия" Spring Boot 
 /lesson-05 - Продвинутая конфигурация Spring-приложений
 /lesson-07 - DAO на Spring JDBC
-/lesson-09 - JPQL, Spring ORM, DAO на основе Spring ORM + JPA 
+/lesson-09 - JPQL, Spring ORM, DAO на основе Spring ORM + JPA
+/lesson-11 - "Белая магия" Spring Data: Spring Data JPA
