@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      port: 0
+      database: library
+
+  shell:
+    interactive:
+      enabled: false
+
+logging:
+  level:
+    root: error

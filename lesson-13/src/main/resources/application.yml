@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      database: library
+      uri: mongodb://localhost
+
+logging:
+  level:
+    root: error
