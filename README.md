@@ -9,3 +9,4 @@
 /lesson-07 - DAO на Spring JDBC
 /lesson-09 - JPQL, Spring ORM, DAO на основе Spring ORM + JPA
 /lesson-11 - "Белая магия" Spring Data: Spring Data JPA
+/lesson-13 - Spring Data для подключения к нереляционным БД
