@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book edit form</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <form id="edit-form" th:action="@{/book/edit(number=${book.number})}" th:method="post" th:object="${book}"
+          action="book-edit.html">
+        <h1>Книга</h1>
+
+        <div class="row">
+            <label for="id-input">Номер:&nbsp;</label>
+            <input class="readonly" id="id-input" type="text" th:field="*{number}" readonly="readonly" value="1">
+        </div>
+        <div class="row">
+            <label for="name-input">Наименование:&nbsp;</label>
+            <input id="name-input" th:field="*{title}" type="text" value="12 стульев">
+        </div>
+        <div class="row">
+            <label for="authors-input">Автор:&nbsp;</label>
+            <input id="authors-input" th:field="*{authors}" type="text" value="Илья Ильф">
+        </div>
+        <div class="row">
+            <label for="genres-input">Жанр:&nbsp;</label>
+            <input id="genres-input" th:field="*{genres}" type="text" value="Комедия">
+        </div>
+        <div class="row">
+            <label for="description-input">Описание:&nbsp;</label>
+            <textarea id="description-input" rows="5" cols="30"
+                      th:field="*{description}">Краткое описание книги</textarea>
+        </div>
+
+        <div class="row">
+            <button type="submit" name="save">Сохранить</button>
+            <button type="submit" name="cancel">Отмена</button>
+        </div>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>

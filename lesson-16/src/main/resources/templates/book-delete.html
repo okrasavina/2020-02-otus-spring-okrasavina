@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Book delete form</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <form id="delete-form" th:action="@{/book/delete(number=${book.number})}" th:method="post" th:object="${book}"
+          action="book-delete.html">
+        <h1>Книга</h1>
+
+        <div class="row">
+            <label for="id-input">Номер:&nbsp;</label>
+            <input class="readonly" id="id-input" type="text" th:field="*{number}" readonly="readonly" value="1">
+        </div>
+        <div class="row">
+            <label for="name-input">Наименование:&nbsp;</label>
+            <input class="readonly" id="name-input" type="text" th:field="*{title}" readonly="readonly" value="12 стульев">
+        </div>
+        <div class="row">
+            <label for="authors-input">Автор:&nbsp;</label>
+            <input class="readonly" id="authors-input" type="text" th:field="*{authors}" readonly="readonly" value="Илья Ильф">
+        </div>
+        <div class="row">
+            <label for="genres-input">Жанр:&nbsp;</label>
+            <input class="readonly" id="genres-input" type="text" th:field="*{genres}" readonly="readonly" value="Комедия">
+        </div>
+        <div class="row">
+            <label for="description-input">Описание:&nbsp;</label>
+            <textarea class="readonly" id="description-input" rows="5" cols="30" th:field="*{description}" readonly="readonly">Краткое описание книги</textarea>
+        </div>
+
+        <div class="row">
+            <button type="submit" name="delete">Удалить</button>
+            <button type="submit" name="cancel">Отмена</button>
+        </div>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>

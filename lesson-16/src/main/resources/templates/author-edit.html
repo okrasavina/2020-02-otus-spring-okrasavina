@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Author edit form</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <form id="edit-form" th:action="@{/author/edit(number=${author.number})}" th:method="post"
+          th:object="${author}" action="author-edit.html">
+        <h1>Автор</h1>
+
+        <div class="row">
+            <label for="id-input">Номер:&nbsp;</label>
+            <input class="readonly" id="id-input" type="text" th:field="*{number}" readonly="readonly" value="0">
+        </div>
+        <div class="row">
+            <label for="name-input">Полное имя:&nbsp;</label>
+            <input id="name-input" th:class="${notNew} ? 'readonly'" th:field="*{name}" th:readonly="${notNew} ? 'readonly'"
+                   type="text" value="Илья Ильф">
+        </div>
+        <div class="row">
+            <label for="description-input">Дата рождения:&nbsp;</label>
+            <input id="description-input" th:field="*{birthDay}" type="text" value="1897-10-15">
+        </div>
+
+        <div class="row">
+            <button type="submit" name="save">Сохранить</button>
+            <button type="submit" name="cancel">Отмена</button>
+        </div>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>
