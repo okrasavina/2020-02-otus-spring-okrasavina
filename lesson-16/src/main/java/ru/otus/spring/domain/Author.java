@@ -25,7 +25,6 @@ public class Author {
     private LocalDate birthDay;
 
     public Author(String name, LocalDate birthDay) {
-        this.id = 0L;
         this.name = name;
         this.birthDay = birthDay;
     }

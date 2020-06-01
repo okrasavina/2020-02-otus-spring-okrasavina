@@ -24,7 +24,6 @@ public class Genre {
     private String description;
 
     public Genre(String name, String description) {
-        this.id = 0L;
         this.name = name;
         this.description = description;
     }

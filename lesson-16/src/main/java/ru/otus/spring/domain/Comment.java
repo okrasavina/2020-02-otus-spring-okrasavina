@@ -25,7 +25,6 @@ public class Comment {
     private Book book;
 
     public Comment(String textComment, Book book) {
-        this.id = 0L;
         this.textComment = textComment;
         this.book = book;
     }
