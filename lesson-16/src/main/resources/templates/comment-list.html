@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of comments</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <h1 th:text="${'Комментарии к книге ''' + libraryBook.title + ''''}" hidden></h1>
+    <p th:if="${#lists.isEmpty(comments)}">Список пуст</p>
+    <table class="object-list" th:if="${not #lists.isEmpty(comments)}">
+        <caption th:text="${'Комментарии к книге ''' + libraryBook.title + ''''}"></caption>
+        <thead>
+        <tr>
+            <th>Номер</th>
+            <th style="width: 400px;">Текст комментария</th>
+            <th colspan="2">Возможные действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="comment : ${comments}" th:object="${comment}">
+            <td th:text="*{number}"></td>
+            <td th:text="*{textComment}"></td>
+            <td class="row-action"><a th:href="@{/comment/edit(number=${comment.number})}" href="comment-edit.html">Изменить</a></td>
+            <td class="row-action"><a th:href="@{/comment/delete(number=${comment.number})}" href="comment-delete.html">Удалить</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <form th:action="@{/comment/new(number=${libraryBook.number})}" th:method="get">
+        <button>Добавить</button>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>

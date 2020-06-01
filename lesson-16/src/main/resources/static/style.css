@@ -1,0 +1,75 @@
+body {
+    font-family: Arial sans-serif;
+    font-size: 16px;
+}
+
+h1,
+caption{
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.welcome-text {
+    font-size: 2em;
+    text-align: center;
+}
+
+.object-list {
+    border: 3px solid black;
+    border-collapse: collapse;
+}
+
+caption {
+    text-align: center;
+    caption-side: top;
+    margin: 10px;
+}
+
+th {
+    border: 2px solid black;
+    text-align: center;
+    padding: 5px 10px;
+    background-color: lightyellow;
+}
+
+.object-list td {
+    border: 2px solid darkgray;
+    padding: 5px 10px;
+    white-space: pre-wrap
+}
+
+.object-list .row-action {
+    border-left: none;
+    border-right: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+input,
+textarea {
+    border-radius: 5px;
+    background-color: lightyellow;
+    padding: 2px 5px;
+}
+
+button {
+    margin-top: 10px;
+    background-color: darksalmon;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.readonly {
+    color: grey;
+    background-color: lightgrey;
+}
+footer {
+    color: #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+    padding: 5px;
+    margin-top: 30px;
+}
