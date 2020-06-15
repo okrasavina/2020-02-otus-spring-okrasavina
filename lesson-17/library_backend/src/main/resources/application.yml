@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    initialization-mode: always
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    root: info
