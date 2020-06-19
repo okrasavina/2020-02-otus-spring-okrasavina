@@ -2,6 +2,7 @@ package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Genre;
 import ru.otus.spring.dto.EntityNotAllowedDeleteException;
 import ru.otus.spring.dto.EntityNotFoundException;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DefaultGenreService implements GenreService {
 
     private final GenreRepository genreRepository;
@@ -22,6 +24,7 @@ public class DefaultGenreService implements GenreService {
         return genreRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
     }
 
+    @Transactional
     @Override
     public LibraryGenre saveGenre(LibraryGenre libraryGenre) {
         Genre genre = toDomain(libraryGenre);
@@ -35,6 +38,7 @@ public class DefaultGenreService implements GenreService {
         return toDto(genre);
     }
 
+    @Transactional
     @Override
     public void deleteGenre(LibraryGenre libraryGenre) throws EntityNotAllowedDeleteException{
         try {

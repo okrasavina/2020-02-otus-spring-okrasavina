@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class AuthorList extends React.Component {
     constructor(props) {
@@ -7,34 +8,30 @@ export default class AuthorList extends React.Component {
             authors: [],
             isEmpty: true
         };
-        this.editAuthor = this.editAuthor.bind(this);
-        this.deleteAuthor = this.deleteAuthor.bind(this);
-        this.addNewAuthor = this.addNewAuthor.bind(this);
     };
 
     componentDidMount() {
-        fetch('/api/author')
-            .then(response => response.json())
+        ApiService.fetchListAuthor()
             .then(authors => {
                 this.setState({authors});
                 this.setState({isEmpty: authors.size === 0})
             });
     }
 
-    editAuthor(number) {
-        window.localStorage.setItem("authorNumber", number);
+    editAuthor = number => {
+        window.localStorage.setItem('authorNumber', number);
         this.props.history.push('/author/edit');
-    }
+    };
 
-    deleteAuthor(number) {
-        window.localStorage.setItem("authorNumber", number);
+    deleteAuthor = number => {
+        window.localStorage.setItem('authorNumber', number);
         this.props.history.push('/author/delete');
-    }
+    };
 
-    addNewAuthor() {
-        window.localStorage.removeItem("authorNumber");
+    addNewAuthor = () => {
+        window.localStorage.removeItem('authorNumber');
         this.props.history.push('/author/new');
-    }
+    };
 
     render() {
         return (

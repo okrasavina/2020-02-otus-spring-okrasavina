@@ -20,8 +20,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("Контроллер для работы с жанрами должен")
@@ -83,7 +82,7 @@ class GenreControllerTest {
     void shouldSaveGenre() {
         when(genreService.saveGenre(new LibraryGenre())).thenReturn(genre);
 
-        mvc.perform(post("/api/genre/save/")
+        mvc.perform(post("/api/genre/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(genre)))
                 .andExpect(status().isOk());
@@ -95,7 +94,7 @@ class GenreControllerTest {
     @DisplayName("удалять существующий жанр")
     @Test
     void shouldDeleteGenre() {
-        mvc.perform(post("/api/genre/delete/")
+        mvc.perform(delete("/api/genre/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(genre)))
                 .andExpect(status().isOk());

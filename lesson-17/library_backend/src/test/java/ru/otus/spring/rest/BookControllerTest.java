@@ -11,19 +11,15 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.otus.spring.dto.LibraryAuthor;
 import ru.otus.spring.dto.LibraryBook;
-import ru.otus.spring.dto.LibraryGenre;
 import ru.otus.spring.service.BookService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("Контроллер для работы с книгами должен")
@@ -88,7 +84,7 @@ class BookControllerTest {
     void shouldSaveBook() {
         when(bookService.saveBook(new LibraryBook())).thenReturn(libraryBook);
 
-        mvc.perform(post("/api/book/save/")
+        mvc.perform(post("/api/book/")
                 .content(new ObjectMapper().writeValueAsString(libraryBook))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -100,7 +96,7 @@ class BookControllerTest {
     @DisplayName("удалять существующую книгу")
     @Test
     void shouldDeleteBook() {
-        mvc.perform(post("/api/book/delete/")
+        mvc.perform(delete("/api/book/")
                 .content(new ObjectMapper().writeValueAsString(libraryBook))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

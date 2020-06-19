@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class CommentList extends React.Component {
     constructor(props) {
@@ -7,42 +8,37 @@ export default class CommentList extends React.Component {
             commentsBook: [],
             isEmpty: true
         };
-        this.editComment = this.editComment.bind(this);
-        this.deleteComment = this.deleteComment.bind(this);
-        this.addNewComment = this.addNewComment.bind(this);
-        this.returnToBookList = this.returnToBookList.bind(this);
     }
 
     componentDidMount() {
-        let bookNumber = window.localStorage.getItem("bookNumber");
-        fetch('/api/comment/' + bookNumber)
-            .then(response => response.json())
+        let bookNumber = window.localStorage.getItem('bookNumber');
+        ApiService.fetchListComment(bookNumber)
             .then(commentsBook => {
                 this.setState({commentsBook});
                 this.setState({isEmpty: commentsBook.size === 0})
             });
     }
 
-    editComment(number) {
-        window.localStorage.setItem("commentNumber", number);
+    editComment = number => {
+        window.localStorage.setItem('commentNumber', number);
         this.props.history.push('/comment/edit');
-    }
+    };
 
-    deleteComment(number) {
-        window.localStorage.setItem("commentNumber", number);
+    deleteComment = number => {
+        window.localStorage.setItem('commentNumber', number);
         this.props.history.push('/comment/delete');
-    }
+    };
 
-    addNewComment() {
-        window.localStorage.removeItem("commentNumber");
+    addNewComment = () => {
+        window.localStorage.removeItem('commentNumber');
         this.props.history.push('/comment/new');
-    }
+    };
 
-    returnToBookList() {
-        window.localStorage.removeItem("bookNumber");
-        window.localStorage.removeItem("bookTitle");
+    returnToBookList = () => {
+        window.localStorage.removeItem('bookNumber');
+        window.localStorage.removeItem('bookTitle');
         this.props.history.push('/book');
-    }
+    };
 
     render() {
         const bookTitle = window.localStorage.getItem('bookTitle');
@@ -59,7 +55,7 @@ export default class CommentList extends React.Component {
                     <tr>
                         <th>Номер</th>
                         <th>Текст комментария</th>
-                        <th colSpan="2">Возможные действия</th>
+                        <th colSpan='2'>Возможные действия</th>
                     </tr>
                     </thead>
                     <tbody>

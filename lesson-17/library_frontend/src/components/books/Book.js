@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class Book extends React.Component {
     constructor(props) {
@@ -10,27 +11,20 @@ export default class Book extends React.Component {
             genres: '',
             description: ''
         };
-        this.cancel = this.cancel.bind(this);
-        this.submitBookHandler = this.submitBookHandler.bind(this);
-        this.saveBook = this.saveBook.bind(this);
-        this.deleteBook = this.deleteBook.bind(this);
-        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
         if (this.props.modeOpen !== 1) {
             let bookNumber = window.localStorage.getItem('bookNumber');
-            fetch('/api/book/' + bookNumber)
-                .then(response => {
-                    if (!response.ok) throw new Error("Книга не найдена");
-                    else return response.json()
-                })
+            ApiService.fetchBook(bookNumber)
                 .then(book => {
-                    this.setState({number: book.number});
-                    this.setState({title: book.title});
-                    this.setState({authors: book.authors});
-                    this.setState({genres: book.genres});
-                    this.setState({description: book.description})
+                    this.setState({
+                        number: book.number,
+                        title: book.title,
+                        authors: book.authors,
+                        genres: book.genres,
+                        description: book.description
+                    })
                 });
         }
     }
@@ -39,49 +33,37 @@ export default class Book extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    cancel() {
-        window.localStorage.removeItem("bookNumber");
+    cancel = () => {
+        window.localStorage.removeItem('bookNumber');
         this.props.history.push('/book');
-    }
+    };
 
-    submitBookHandler() {
-        window.localStorage.removeItem("bookNumber");
+    submitBookHandler = () => {
+        window.localStorage.removeItem('bookNumber');
         if (this.props.modeOpen === 3) {
             this.deleteBook();
         } else {
             this.saveBook();
         }
-    }
+    };
 
-    saveBook() {
+    saveBook = () => {
         let book = {
             number: this.state.number, title: this.state.title, authors: this.state.authors,
             genres: this.state.genres, description: this.state.description
         };
-        fetch('/api/book/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(book)
-        })
+        ApiService.saveBook(book)
             .then(this.props.history.push('/book'));
-    }
+    };
 
-    deleteBook() {
+    deleteBook = () => {
         let book = {
             number: this.state.number, title: this.state.title, authors: this.state.authors,
             genres: this.state.genres, description: this.state.description
         };
-        fetch('/api/book/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(book)
-        })
+        ApiService.deleteBook(book)
             .then(this.props.history.push('/book'));
-    }
+    };
 
     render() {
         const readOnly = this.props.modeOpen === 3;
@@ -96,7 +78,8 @@ export default class Book extends React.Component {
                     </div>
                     <div className={'row'}>
                         <label htmlFor={'title-input'}>Наименование:&nbsp;</label>
-                        <input className={readOnly ? 'readonly' : null} id={'title-input'} name={'title'} type={'text'}
+                        <input className={readOnly ? 'readonly' : null} id={'title-input'} name={'title'}
+                               type={'text'}
                                readOnly={readOnly} onChange={this.onChange} value={this.state.title}/>
                     </div>
                     <div className={'row'}>
@@ -113,13 +96,15 @@ export default class Book extends React.Component {
                     </div>
                     <div className={'row'}>
                         <label htmlFor={'description-input'}>Описание:&nbsp;</label>
-                        <textarea cols={30} className={readOnly ? 'readonly' : null} rows={5} id={'description-input'}
+                        <textarea cols={30} className={readOnly ? 'readonly' : null} rows={5}
+                                  id={'description-input'}
                                   name={'description'} readOnly={readOnly} onChange={this.onChange}
                                   value={this.state.description}/>
                     </div>
 
                     <div className={'row'}>
-                        <button onClick={() => this.submitBookHandler()}>{readOnly ? 'Удалить' : 'Сохранить'}</button>
+                        <button
+                            onClick={() => this.submitBookHandler()}>{readOnly ? 'Удалить' : 'Сохранить'}</button>
                         <button className={'btn-right'} onClick={() => this.cancel()}>Отмена</button>
                     </div>
                 </form>

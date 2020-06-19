@@ -6,7 +6,7 @@
 
 h1,
 caption{
-    font-size: 1.5em;
+    font-size: 24px;
     font-weight: bold;
 }
 
@@ -15,7 +15,7 @@ caption{
 }
 
 .welcome-text {
-    font-size: 2em;
+    font-size: 32px;
     text-align: center;
 }
 

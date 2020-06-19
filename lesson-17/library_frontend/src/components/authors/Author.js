@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from "../ApiService";
 
 export default class Author extends React.Component {
     constructor(props) {
@@ -8,28 +9,21 @@ export default class Author extends React.Component {
             name: '',
             birthDay: ''
         };
-        this.cancel = this.cancel.bind(this);
-        this.submitHandler = this.submitHandler.bind(this);
-        this.saveAuthor = this.saveAuthor.bind(this);
-        this.deleteAuthor = this.deleteAuthor.bind(this);
-        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
         if (this.props.modeOpen !== 1) {
             let authorNumber = window.localStorage.getItem('authorNumber');
-            fetch('/api/author/' + authorNumber)
-                .then(response => {
-                    if (!response.ok) throw new Error("Автор не найден");
-                    else return response.json()
-                })
+            ApiService.fetchAuthor(authorNumber)
                 .then(author => {
-                    this.setState({number: author.number});
-                    this.setState({name: author.name});
-                    this.setState({birthDay: author.birthDay})
+                    this.setState({
+                        number: author.number,
+                        name: author.name,
+                        birthDay: author.birthDay
+                    })
                 })
                 .catch(e => {
-                    window.localStorage.setItem("messageError", e);
+                    window.localStorage.setItem('messageError', e);
                     this.props.history.push('/error')
                 });
         }
@@ -39,59 +33,39 @@ export default class Author extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    cancel() {
-        window.localStorage.removeItem("authorNumber");
+    cancel = () => {
+        window.localStorage.removeItem('authorNumber');
         this.props.history.push('/author');
-    }
+    };
 
-    submitHandler() {
-        window.localStorage.removeItem("authorNumber");
+    submitHandler = () => {
+        window.localStorage.removeItem('authorNumber');
         if (this.props.modeOpen === 3) {
             this.deleteAuthor();
         } else {
             this.saveAuthor();
         }
-    }
+    };
 
-    saveAuthor() {
+    saveAuthor = () => {
         let author = {number: this.state.number, name: this.state.name, birthDay: this.state.birthDay};
-        fetch('/api/author/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(author)
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("Ошибка при сохранении автора");
-                else return response.json()
-            })
+        ApiService.saveAuthor(author)
             .then(this.props.history.push('/author'))
             .catch(e => {
                 window.localStorage.setItem("messageError", e);
                 this.props.history.push('/error')
             });
-    }
+    };
 
-    deleteAuthor() {
+    deleteAuthor = () => {
         let author = {number: this.state.number, name: this.state.name, birthDay: this.state.birthDay};
-        fetch('/api/author/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(author)
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("Ошибка при удалении автора");
-                else return response.json()
-            })
+        ApiService.deleteAuthor(author)
             .then(this.props.history.push('/author'))
             .catch(e => {
-                window.localStorage.setItem("messageError", e);
+                window.localStorage.setItem('messageError', e);
                 this.props.history.push('/error')
             });
-    }
+    };
 
     render() {
         const readOnly = this.props.modeOpen === 3;

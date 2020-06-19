@@ -2,6 +2,7 @@ package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.dto.EntityNotAllowedDeleteException;
 import ru.otus.spring.dto.EntityNotFoundException;
@@ -13,6 +14,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class DefaultAuthorService implements AuthorService {
     private final AuthorRepository authorRepository;
 
@@ -27,6 +29,7 @@ public class DefaultAuthorService implements AuthorService {
         return toDto(author);
     }
 
+    @Transactional
     @Override
     public LibraryAuthor saveAuthor(LibraryAuthor libraryAuthor) {
         Author author = toDomain(libraryAuthor);
@@ -34,6 +37,7 @@ public class DefaultAuthorService implements AuthorService {
         return toDto(author);
     }
 
+    @Transactional
     @Override
     public void deleteAuthor(LibraryAuthor libraryAuthor) throws EntityNotAllowedDeleteException {
         try {

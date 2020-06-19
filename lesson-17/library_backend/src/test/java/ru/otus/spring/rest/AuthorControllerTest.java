@@ -21,11 +21,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("Контроллер для работы с авторами должен")
@@ -87,7 +85,7 @@ class AuthorControllerTest {
         when(authorService.saveAuthor(new LibraryAuthor())).thenReturn(author);
         System.out.println(new ObjectMapper().writeValueAsString(author));
 
-        mvc.perform(post("/api/author/save/")
+        mvc.perform(post("/api/author/")
                 .content(getAuthorContent())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -99,7 +97,7 @@ class AuthorControllerTest {
     @DisplayName("удалять существующего автора")
     @Test
     void shouldDeleteAuthor() {
-        mvc.perform(post("/api/author/delete/")
+        mvc.perform(delete("/api/author/")
                 .content(getAuthorContent())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

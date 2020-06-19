@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class CommentBook extends React.Component {
     constructor(props) {
@@ -7,21 +8,17 @@ export default class CommentBook extends React.Component {
             number: '0',
             textComment: ''
         };
-        this.cancel = this.cancel.bind(this);
-        this.submitCommentHandler = this.submitCommentHandler.bind(this);
-        this.saveComment = this.saveComment.bind(this);
-        this.deleteComment = this.deleteComment.bind(this);
-        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
         if (this.props.modeOpen !== 1) {
             let commentNumber = window.localStorage.getItem('commentNumber');
-            fetch('/api/comment/get/' + commentNumber)
-                .then(response => response.json())
+            ApiService.fetchComment(commentNumber)
                 .then(commentBook => {
-                    this.setState({number: commentBook.number});
-                    this.setState({textComment: commentBook.textComment})
+                    this.setState({
+                        number: commentBook.number,
+                        textComment: commentBook.textComment
+                    })
                 });
         }
     }
@@ -30,44 +27,32 @@ export default class CommentBook extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    cancel() {
-        window.localStorage.removeItem("commentNumber");
+    cancel = () => {
+        window.localStorage.removeItem('commentNumber');
         this.props.history.push('/comment');
-    }
+    };
 
-    submitCommentHandler() {
-        window.localStorage.removeItem("commentNumber");
-        let bookNumber = window.localStorage.getItem("bookNumber");
+    submitCommentHandler = () => {
+        window.localStorage.removeItem('commentNumber');
+        let bookNumber = window.localStorage.getItem('bookNumber');
         if (this.props.modeOpen === 3) {
             this.deleteComment(bookNumber);
         } else {
             this.saveComment(bookNumber);
         }
-    }
+    };
 
-    saveComment(bookNumber) {
+    saveComment = bookNumber => {
         let commentBook = {number: this.state.number, textComment: this.state.textComment};
-        fetch('/api/comment/save/' + bookNumber, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(commentBook)
-        })
+        ApiService.saveComment(bookNumber, commentBook)
             .then(this.props.history.push('/comment'));
-    }
+    };
 
-    deleteComment(bookNumber) {
+    deleteComment = bookNumber => {
         let commentBook = {number: this.state.number, textComment: this.state.textComment};
-        fetch('/api/comment/delete/' + bookNumber, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(commentBook)
-        })
+        ApiService.deleteComment(bookNumber, commentBook)
             .then(this.props.history.push('/comment'));
-    }
+    };
 
     render() {
         const bookTitle = window.localStorage.getItem('bookTitle');

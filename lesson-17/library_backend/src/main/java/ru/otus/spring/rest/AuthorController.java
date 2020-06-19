@@ -1,7 +1,6 @@
 package ru.otus.spring.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.dto.EntityNotAllowedDeleteException;
@@ -9,6 +8,7 @@ import ru.otus.spring.dto.LibraryAuthor;
 import ru.otus.spring.service.AuthorService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,20 +22,19 @@ public class AuthorController {
     }
 
     @GetMapping("/api/author/{number}")
-    public ResponseEntity<LibraryAuthor> getAuthor(@PathVariable Long number) {
+    public ResponseEntity<LibraryAuthor> getAuthor(@PathVariable long number) {
         return ResponseEntity.ok(authorService.getAuthorById(number));
     }
 
-    @PostMapping("/api/author/save")
-    public ResponseEntity<Void> saveAuthor(@RequestBody LibraryAuthor author) {
-        authorService.saveAuthor(author);
-        return ResponseEntity.ok(null);
+    @PostMapping("/api/author")
+    public ResponseEntity<LibraryAuthor> saveAuthor(@RequestBody LibraryAuthor author) {
+        return ResponseEntity.ok(authorService.saveAuthor(author));
     }
 
-    @PostMapping("/api/author/delete")
-    public ResponseEntity<Void> deleteAuthor(@RequestBody LibraryAuthor author) throws EntityNotAllowedDeleteException {
+    @DeleteMapping("/api/author")
+    public ResponseEntity<Optional<LibraryAuthor>> deleteAuthor(@RequestBody LibraryAuthor author) throws EntityNotAllowedDeleteException {
         authorService.deleteAuthor(author);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Optional.empty());
     }
 
 }

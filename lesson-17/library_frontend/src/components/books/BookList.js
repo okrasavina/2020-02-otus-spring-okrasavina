@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class BookList extends React.Component {
     constructor(props) {
@@ -7,41 +8,36 @@ export default class BookList extends React.Component {
             books: [],
             isEmpty: true
         };
-        this.editBook = this.editBook.bind(this);
-        this.deleteBook = this.deleteBook.bind(this);
-        this.addNewBook = this.addNewBook.bind(this);
-        this.showComments = this.showComments.bind(this);
     }
 
     componentDidMount() {
-        fetch('/api/book')
-            .then(response => response.json())
+        ApiService.fetchListBook()
             .then(books => {
                 this.setState({books});
                 this.setState({isEmpty: books.size === 0})
             });
     }
 
-    editBook(number) {
-        window.localStorage.setItem("bookNumber", number);
+    editBook = number => {
+        window.localStorage.setItem('bookNumber', number);
         this.props.history.push('/book/edit');
-    }
+    };
 
-    deleteBook(number) {
-        window.localStorage.setItem("bookNumber", number);
+    deleteBook = number => {
+        window.localStorage.setItem('bookNumber', number);
         this.props.history.push('/book/delete');
-    }
+    };
 
     addNewBook() {
-        window.localStorage.removeItem("bookNumber");
+        window.localStorage.removeItem('bookNumber');
         this.props.history.push('/book/new');
     }
 
-    showComments(number, title) {
-        window.localStorage.setItem("bookNumber", number);
-        window.localStorage.setItem("bookTitle", title);
+    showComments = (number, title) => {
+        window.localStorage.setItem('bookNumber', number);
+        window.localStorage.setItem('bookTitle', title);
         this.props.history.push('/comment');
-    }
+    };
 
     render() {
         return (
@@ -55,7 +51,7 @@ export default class BookList extends React.Component {
                         <th>Номер</th>
                         <th>Наименование</th>
                         <th>Автор</th>
-                        <th colSpan="3">Возможные действия</th>
+                        <th colSpan='3'>Возможные действия</th>
                     </tr>
                     </thead>
                     <tbody>

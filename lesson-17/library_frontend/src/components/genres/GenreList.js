@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class GenreList extends React.Component {
     constructor(props) {
@@ -7,34 +8,30 @@ export default class GenreList extends React.Component {
             genres: [],
             isEmpty: true
         };
-        this.editGenre = this.editGenre.bind(this);
-        this.deleteGenre = this.deleteGenre.bind(this);
-        this.addNewGenre = this.addNewGenre.bind(this);
     }
 
     componentDidMount() {
-        fetch('/api/genre')
-            .then(response => response.json())
+        ApiService.fetchListGenre()
             .then(genres => {
                 this.setState({genres});
                 this.setState({isEmpty: genres.size === 0})
             })
     }
 
-    editGenre(number) {
-        window.localStorage.setItem("genreNumber", number);
+    editGenre = number => {
+        window.localStorage.setItem('genreNumber', number);
         this.props.history.push('/genre/edit');
-    }
+    };
 
-    deleteGenre(number) {
-        window.localStorage.setItem("genreNumber", number);
+    deleteGenre = number => {
+        window.localStorage.setItem('genreNumber', number);
         this.props.history.push('/genre/delete');
-    }
+    };
 
-    addNewGenre() {
-        window.localStorage.removeItem("genreNumber");
+    addNewGenre = () => {
+        window.localStorage.removeItem('genreNumber');
         this.props.history.push('/genre/new');
-    }
+    };
 
     render() {
         return (
@@ -47,7 +44,7 @@ export default class GenreList extends React.Component {
                     <tr>
                         <th>Номер</th>
                         <th>Наименование</th>
-                        <th colSpan="2">Возможные действия</th>
+                        <th colSpan='2'>Возможные действия</th>
                     </tr>
                     </thead>
                     <tbody>

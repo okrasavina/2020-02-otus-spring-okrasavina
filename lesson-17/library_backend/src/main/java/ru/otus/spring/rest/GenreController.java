@@ -1,7 +1,6 @@
 package ru.otus.spring.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.dto.EntityNotAllowedDeleteException;
@@ -9,6 +8,7 @@ import ru.otus.spring.dto.LibraryGenre;
 import ru.otus.spring.service.GenreService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,20 +21,19 @@ public class GenreController {
     }
 
     @GetMapping("/api/genre/{number}")
-    public ResponseEntity<LibraryGenre> getGenre(@PathVariable Long number) {
+    public ResponseEntity<LibraryGenre> getGenre(@PathVariable long number) {
         return ResponseEntity.ok(genreService.getGenreById(number));
     }
 
-    @PostMapping("/api/genre/save")
-    public ResponseEntity<Void> saveGenre(@RequestBody LibraryGenre genre) {
-        genreService.saveGenre(genre);
-        return ResponseEntity.ok(null);
+    @PostMapping("/api/genre")
+    public ResponseEntity<LibraryGenre> saveGenre(@RequestBody LibraryGenre genre) {
+        return ResponseEntity.ok(genreService.saveGenre(genre));
     }
 
-    @PostMapping("/api/genre/delete/")
-    public ResponseEntity<Void> deleteGenre(@RequestBody LibraryGenre genre) throws EntityNotAllowedDeleteException {
+    @DeleteMapping("/api/genre")
+    public ResponseEntity<Optional<LibraryGenre>> deleteGenre(@RequestBody LibraryGenre genre) throws EntityNotAllowedDeleteException {
         genreService.deleteGenre(genre);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Optional.empty());
     }
 
 }

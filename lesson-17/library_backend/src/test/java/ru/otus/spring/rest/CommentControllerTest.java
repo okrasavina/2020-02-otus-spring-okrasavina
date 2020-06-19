@@ -21,8 +21,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @DisplayName("Контроллер для работы с комментариями должен")
@@ -89,7 +88,7 @@ class CommentControllerTest {
         when(bookService.getBookById(book.getNumber())).thenReturn(book);
         when(commentService.saveComment(new LibraryComment(book))).thenReturn(comment);
 
-        mvc.perform(post("/api/comment/save/{bookNumber}", book.getNumber())
+        mvc.perform(post("/api/comment/{bookNumber}", book.getNumber())
                 .content(new ObjectMapper().writeValueAsString(comment))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -104,7 +103,7 @@ class CommentControllerTest {
     void shouldDeleteComment() {
         when(bookService.getBookById(book.getNumber())).thenReturn(book);
 
-        mvc.perform(post("/api/comment/delete/{bookNumber}", book.getNumber())
+        mvc.perform(delete("/api/comment/{bookNumber}", book.getNumber())
                 .content(new ObjectMapper().writeValueAsString(comment))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

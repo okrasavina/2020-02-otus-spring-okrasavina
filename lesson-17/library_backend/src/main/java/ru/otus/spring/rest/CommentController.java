@@ -1,21 +1,17 @@
 package ru.otus.spring.rest;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.spring.dto.LibraryBook;
 import ru.otus.spring.dto.LibraryComment;
 import ru.otus.spring.service.BookService;
 import ru.otus.spring.service.CommentService;
 
 import java.util.List;
+import java.util.Optional;
 
-@Controller
+@RestController
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -29,21 +25,20 @@ public class CommentController {
     }
 
     @GetMapping("/api/comment/get/{number}")
-    public ResponseEntity<LibraryComment> getComment(@PathVariable Long number) {
+    public ResponseEntity<LibraryComment> getComment(@PathVariable long number) {
         return ResponseEntity.ok(commentService.getCommentById(number));
     }
 
-    @PostMapping("/api/comment/save/{bookNumber}")
-    public ResponseEntity<Void> saveComment(@PathVariable Long bookNumber, @RequestBody LibraryComment comment) {
+    @PostMapping("/api/comment/{bookNumber}")
+    public ResponseEntity<LibraryComment> saveComment(@PathVariable long bookNumber, @RequestBody LibraryComment comment) {
         comment.setLibraryBook(bookService.getBookById(bookNumber));
-        commentService.saveComment(comment);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(commentService.saveComment(comment));
     }
 
-    @PostMapping("/api/comment/delete/{bookNumber}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long bookNumber, @RequestBody LibraryComment comment) {
+    @DeleteMapping("/api/comment/{bookNumber}")
+    public ResponseEntity<Optional<LibraryComment>> deleteComment(@PathVariable long bookNumber, @RequestBody LibraryComment comment) {
         comment.setLibraryBook(bookService.getBookById(bookNumber));
         commentService.deleteComment(comment);
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(Optional.empty());
     }
 }

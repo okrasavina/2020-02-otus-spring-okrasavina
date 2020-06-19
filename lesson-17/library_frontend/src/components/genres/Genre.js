@@ -1,4 +1,5 @@
-import React from "react";
+import React from 'react';
+import ApiService from '../ApiService';
 
 export default class Genre extends React.Component {
     constructor(props) {
@@ -8,29 +9,22 @@ export default class Genre extends React.Component {
             name: '',
             description: ''
         };
-        this.cancel = this.cancel.bind(this);
-        this.submitGenreHandler = this.submitGenreHandler.bind(this);
-        this.saveGenre = this.saveGenre.bind(this);
-        this.deleteGenre = this.deleteGenre.bind(this);
-        this.onChange = this.onChange.bind(this);
     }
 
     componentDidMount() {
         if (this.props.modeOpen !== 1) {
             let genreNumber = window.localStorage.getItem('genreNumber');
-            fetch('/api/genre/' + genreNumber)
-                .then(response => {
-                    if (!response.ok) throw new Error("Жанр не найден");
-                    else return response.json()
-                })
+            ApiService.fetchGenre(genreNumber)
                 .then(genre => {
-                    this.setState({number: genre.number});
-                    this.setState({name: genre.name});
-                    this.setState({description: genre.description})
+                    this.setState({
+                        number: genre.number,
+                        name: genre.name,
+                        description: genre.description
+                    });
                 })
                 .catch((e) => {
                     console.log(e);
-                    window.localStorage.setItem("messageError", e);
+                    window.localStorage.setItem('messageError', e);
                     this.props.history.push('/error')
                 });
         }
@@ -40,60 +34,39 @@ export default class Genre extends React.Component {
         this.setState({[e.target.name]: e.target.value});
     }
 
-    cancel() {
-        window.localStorage.removeItem("genreNumber");
+    cancel = () => {
+        window.localStorage.removeItem('genreNumber');
         this.props.history.push('/genre');
-    }
+    };
 
-    submitGenreHandler() {
-        window.localStorage.removeItem("genreNumber");
+    submitGenreHandler = () => {
+        window.localStorage.removeItem('genreNumber');
         if (this.props.modeOpen === 3) {
             this.deleteGenre();
         } else {
             this.saveGenre();
         }
-    }
+    };
 
-    saveGenre() {
+    saveGenre = () => {
         let genre = {number: this.state.number, name: this.state.name, description: this.state.description};
-        fetch('/api/genre/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(genre)
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("Ошибка при сохранении жанра");
-                else return response.json()
-            })
+        ApiService.saveGenre(genre)
             .then(this.props.history.push('/genre'))
             .catch(e => {
-                window.localStorage.setItem("messageError", e);
+                window.localStorage.setItem('messageError', e);
                 this.props.history.push('/error')
             });
-    }
+    };
 
-    deleteGenre() {
+    deleteGenre = () => {
         let genre = {number: this.state.number, name: this.state.name, description: this.state.description};
-        fetch('/api/genre/delete', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8'
-            },
-            body: JSON.stringify(genre)
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Ошибка при удалении жанра");}
-                else return response.json()
-            })
+        ApiService.deleteGenre(genre)
             .then(this.props.history.push('/genre'))
             .catch(e => {
-                window.localStorage.setItem("messageError", e);
+                window.localStorage.setItem('messageError', e);
                 this.props.history.push('/error')
             });
-    }
+    };
 
     render() {
         const readOnly = this.props.modeOpen === 3;
