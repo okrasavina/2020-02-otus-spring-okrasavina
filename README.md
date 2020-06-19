@@ -11,3 +11,4 @@
 /lesson-11 - "Белая магия" Spring Data: Spring Data JPA
 /lesson-13 - Spring Data для подключения к нереляционным БД
 /lesson-16 - Spring MVC View
+/lesson-17 - Современные приложения на Spring MVC
