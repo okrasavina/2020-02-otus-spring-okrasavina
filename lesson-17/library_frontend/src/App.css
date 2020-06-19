@@ -1,0 +1,96 @@
+.library-body {
+    font-family: Arial sans-serif;
+    font-size: 16px;
+    margin-left: 10px;
+}
+
+h1,
+caption{
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+.welcome-text {
+    font-size: 32px;
+    text-align: center;
+}
+
+.object-list {
+    border: 3px solid black;
+    border-collapse: collapse;
+}
+
+caption {
+    text-align: center;
+    caption-side: top;
+    margin: 10px;
+}
+
+th {
+    border: 2px solid black;
+    text-align: center;
+    padding: 5px 10px;
+    background-color: lightyellow;
+}
+
+.object-list td {
+    border: 2px solid darkgray;
+    padding: 5px 10px;
+    white-space: pre-wrap
+}
+
+.object-list .row-action {
+    border-left: none;
+    border-right: none;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+}
+
+input,
+textarea {
+    border-radius: 5px;
+    background-color: lightyellow;
+    padding: 2px 5px;
+}
+
+button {
+    margin-top: 10px;
+    background-color: darksalmon;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.btn-action {
+    background-color: lightgrey;
+}
+
+.btn-right {
+    margin-left: 10px;
+}
+
+.readonly {
+    color: grey;
+    background-color: lightgrey;
+}
+
+.error {
+    margin: 10px;
+    border :1px solid darkred;
+    background-color: darksalmon;
+    width: 500px;
+}
+
+.footer {
+    color: #aaaaaa;
+    border-top: 1px solid #aaaaaa;
+    padding: 5px;
+    margin-top: 30px;
+}
