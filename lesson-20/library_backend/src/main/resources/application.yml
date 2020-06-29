@@ -1,0 +1,10 @@
+spring:
+  data:
+    mongodb:
+      port: 27017
+      database: library
+      host: localhost
+
+logging:
+  level:
+    root: info
