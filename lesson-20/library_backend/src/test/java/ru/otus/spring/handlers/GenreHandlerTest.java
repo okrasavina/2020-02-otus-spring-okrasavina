@@ -93,7 +93,7 @@ class GenreHandlerTest {
         webTestClient.post()
                 .uri("/api/genre")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new LibraryGenre(genre))
+                .bodyValue(LibraryGenre.toDto(genre))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

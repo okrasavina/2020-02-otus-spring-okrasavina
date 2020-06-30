@@ -13,15 +13,9 @@ public class LibraryComment {
     private String textComment;
     private LibraryBook libraryBook;
 
-    public LibraryComment(Comment comment) {
-        this.id = comment.getId();
-        this.textComment = comment.getTextComment();
-        this.libraryBook = new LibraryBook(comment.getBook());
-    }
-
-    public LibraryComment setLibraryBook(LibraryBook book) {
-        this.libraryBook = book;
-        return this;
+    public static LibraryComment toDto(Comment comment) {
+        return new LibraryComment(comment.getId(), comment.getTextComment(),
+                LibraryBook.toDto(comment.getBook()));
     }
 
 }

@@ -1,6 +1,7 @@
 package ru.otus.spring.handlers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -23,20 +24,20 @@ public class CommentHandler {
 
     public Mono<ServerResponse> getComment(ServerRequest request) {
         return commentRepository.findById(request.pathVariable("id"))
-                .map(LibraryComment::new)
+                .map(LibraryComment::toDto)
                 .flatMap(libraryComment -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON)
                         .body(fromValue(libraryComment)))
-                .onErrorResume(ex -> ServerResponse.notFound().build());
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     public Mono<ServerResponse> getListComment(ServerRequest request) {
-        Flux<LibraryComment> commentFlux = bookRepository.findById(request.pathVariable("bookId"))
-                .flatMapMany(commentRepository::findAllByBook)
-                .map(LibraryComment::new);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(commentFlux, LibraryComment.class);
+                .body(bookRepository.findById(request.pathVariable("bookId"))
+                        .flatMapMany(commentRepository::findAllByBook)
+                        .map(LibraryComment::toDto), LibraryComment.class);
     }
 
     public Mono<ServerResponse> saveComment(ServerRequest request) {
@@ -44,7 +45,7 @@ public class CommentHandler {
                 .zipWith(request.bodyToMono(LibraryComment.class))
                 .map(tuple -> new Comment(tuple.getT2().getId(), tuple.getT2().getTextComment(), tuple.getT1()))
                 .flatMap(commentRepository::save)
-                .map(LibraryComment::new);
+                .map(LibraryComment::toDto);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
                 .body(libraryCommentMono, LibraryComment.class);

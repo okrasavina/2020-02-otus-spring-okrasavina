@@ -1,6 +1,7 @@
 package ru.otus.spring.handlers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -24,29 +25,28 @@ public class GenreHandler {
 
     public Mono<ServerResponse> getGenre(ServerRequest request) {
         return genreRepository.findById(request.pathVariable("id"))
-                .map(LibraryGenre::new)
+                .map(LibraryGenre::toDto)
                 .flatMap(libraryGenre -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON)
                         .body(fromValue(libraryGenre)))
-                .onErrorResume(ex -> ServerResponse.notFound().build());
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     public Mono<ServerResponse> getListGenre() {
-        Flux<LibraryGenre> genreFlux = genreRepository.findAll()
-                .map(LibraryGenre::new);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(genreFlux, LibraryGenre.class);
+                .body(genreRepository.findAll()
+                        .map(LibraryGenre::toDto), LibraryGenre.class);
     }
 
     public Mono<ServerResponse> saveGenre(ServerRequest request) {
-        Mono<LibraryGenre> libraryGenreMono = request.bodyToMono(LibraryGenre.class)
-                .map(this::toDomain)
-                .flatMap(genreRepository::save)
-                .map(LibraryGenre::new);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(libraryGenreMono, LibraryGenre.class);
+                .body(request.bodyToMono(LibraryGenre.class)
+                        .map(this::toDomain)
+                        .flatMap(genreRepository::save)
+                        .map(LibraryGenre::toDto), LibraryGenre.class);
     }
 
     public Mono<ServerResponse> deleteGenre(ServerRequest request) {

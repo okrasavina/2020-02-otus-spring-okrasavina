@@ -1,6 +1,7 @@
 package ru.otus.spring.handlers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -32,19 +33,19 @@ public class BookHandler {
 
     public Mono<ServerResponse> getBook(ServerRequest request) {
         return bookRepository.findById(request.pathVariable("id"))
-                .map(LibraryBook::new)
+                .map(LibraryBook::toDto)
                 .flatMap(libraryBook -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON)
                         .body(fromValue(libraryBook)))
-                .onErrorResume(ex -> ServerResponse.notFound().build());
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     public Mono<ServerResponse> getListBook() {
-        Flux<LibraryBook> bookFlux = bookRepository.findAll()
-                .map(LibraryBook::new);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(bookFlux, LibraryBook.class);
+                .body(bookRepository.findAll()
+                        .map(LibraryBook::toDto), LibraryBook.class);
     }
 
     public Mono<ServerResponse> saveBook(ServerRequest request) {
@@ -53,7 +54,7 @@ public class BookHandler {
                         .map(tuple -> new Book(book.getId(), book.getTitle(), book.getDescription(),
                                 tuple.getT1(), tuple.getT2())))
                 .flatMap(bookRepository::save)
-                .map(LibraryBook::new);
+                .map(LibraryBook::toDto);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
                 .body(libraryBookMono, LibraryBook.class);

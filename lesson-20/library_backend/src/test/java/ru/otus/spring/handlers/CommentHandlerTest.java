@@ -103,7 +103,7 @@ class CommentHandlerTest {
         webTestClient.post()
                 .uri("/api/comment/{bookId}", book.getId())
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new LibraryComment(comment))
+                .bodyValue(LibraryComment.toDto(comment))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

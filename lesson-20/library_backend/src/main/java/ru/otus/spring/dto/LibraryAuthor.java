@@ -16,10 +16,8 @@ public class LibraryAuthor {
     private String name;
     private LocalDate birthDay;
 
-    public LibraryAuthor(Author author) {
-        this.id = author.getId();
-        this.name = author.getName();
-        this.birthDay = author.getBirthDay();
+    public static LibraryAuthor toDto(Author author) {
+        return new LibraryAuthor(author.getId(), author.getName(), author.getBirthDay());
     }
 
 }

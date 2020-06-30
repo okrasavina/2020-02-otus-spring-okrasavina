@@ -20,13 +20,11 @@ public class LibraryBook {
     private String authors;
     private String genres;
 
-    public LibraryBook(Book book) {
-        this.id = book.getId();
-        this.title = book.getTitle();
-        this.description = book.getDescription();
-        this.authors = book.getAuthors().stream().map(Author::getName)
-                .collect(Collectors.joining(", "));
-        this.genres = book.getGenres().stream().map(Genre::getName)
-                .collect(Collectors.joining(", "));
+    public static LibraryBook toDto(Book book) {
+        return new LibraryBook(book.getId(), book.getTitle(), book.getDescription(),
+                book.getAuthors().stream().map(Author::getName)
+                        .collect(Collectors.joining(", ")),
+                book.getGenres().stream().map(Genre::getName)
+                        .collect(Collectors.joining(", ")));
     }
 }

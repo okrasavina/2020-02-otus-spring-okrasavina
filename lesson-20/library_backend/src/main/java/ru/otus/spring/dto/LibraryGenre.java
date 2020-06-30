@@ -14,10 +14,7 @@ public class LibraryGenre {
     private String name;
     private String description;
 
-    public LibraryGenre(Genre genre) {
-        this.id = genre.getId();
-        this.name = genre.getName();
-        this.description = genre.getDescription();
+    public static LibraryGenre toDto(Genre genre) {
+        return new LibraryGenre(genre.getId(), genre.getName(), genre.getDescription());
     }
-
 }

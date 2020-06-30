@@ -93,7 +93,7 @@ class AuthorHandlerTest {
         webTestClient.post()
                 .uri("/api/author")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new LibraryAuthor(author))
+                .bodyValue(LibraryAuthor.toDto(author))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

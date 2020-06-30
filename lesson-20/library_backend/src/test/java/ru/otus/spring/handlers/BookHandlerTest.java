@@ -118,7 +118,7 @@ class BookHandlerTest {
         webTestClient.post()
                 .uri("/api/book")
                 .contentType(MediaType.APPLICATION_JSON)
-                .bodyValue(new LibraryBook(book))
+                .bodyValue(LibraryBook.toDto(book))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()

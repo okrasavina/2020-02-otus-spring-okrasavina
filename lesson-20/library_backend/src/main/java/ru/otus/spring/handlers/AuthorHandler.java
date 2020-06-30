@@ -1,6 +1,7 @@
 package ru.otus.spring.handlers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -23,29 +24,28 @@ public class AuthorHandler {
 
     public Mono<ServerResponse> getAuthor(ServerRequest request) {
         return authorRepository.findById(request.pathVariable("id"))
-                .map(LibraryAuthor::new)
+                .map(LibraryAuthor::toDto)
                 .flatMap(libraryAuthor -> ServerResponse.ok()
                         .contentType(APPLICATION_JSON)
                         .body(fromValue(libraryAuthor)))
-                .onErrorResume(ex -> ServerResponse.notFound().build());
+                .switchIfEmpty(ServerResponse.notFound().build())
+                .onErrorResume(ex -> ServerResponse.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 
     public Mono<ServerResponse> getListAuthor() {
-        Flux<LibraryAuthor> authorFlux = authorRepository.findAll()
-                .map(LibraryAuthor::new);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(authorFlux, LibraryAuthor.class);
+                .body(authorRepository.findAll()
+                        .map(LibraryAuthor::toDto), LibraryAuthor.class);
     }
 
     public Mono<ServerResponse> saveAuthor(ServerRequest request) {
-        Mono<LibraryAuthor> libraryAuthorMono = request.bodyToMono(LibraryAuthor.class)
-                .map(this::toDomain)
-                .flatMap(authorRepository::save)
-                .map(LibraryAuthor::new);
         return ServerResponse.ok()
                 .contentType(APPLICATION_JSON)
-                .body(libraryAuthorMono, LibraryAuthor.class);
+                .body(request.bodyToMono(LibraryAuthor.class)
+                        .map(this::toDomain)
+                        .flatMap(authorRepository::save)
+                        .map(LibraryAuthor::toDto), LibraryAuthor.class);
     }
 
     public Mono<ServerResponse> deleteAuthor(ServerRequest request) {
