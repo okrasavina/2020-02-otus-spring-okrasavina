@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>List of genres</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <h1 hidden>Список жанров</h1>
+    <p th:if="${#lists.isEmpty(genres)}">Список пуст</p>
+    <table class="object-list" th:if="${not #lists.isEmpty(genres)}">
+        <caption>Список жанров</caption>
+        <thead>
+        <tr>
+            <th>Номер</th>
+            <th>Наименование</th>
+            <th colspan="2">Возможные действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="genre : ${genres}" th:object="${genre}">
+            <td th:text="*{number}"></td>
+            <td th:text="*{name}"></td>
+            <td class="row-action"><a th:href="@{/genre/edit(number=${genre.number})}" href="genre-edit.html">Изменить</a></td>
+            <td class="row-action"><a th:if="*{couldDelete}" th:href="@{/genre/delete(number=${genre.number})}" href="genre-delete.html">Удалить</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <form th:action="@{/genre/new}" th:method="get">
+        <button>Добавить</button>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>
