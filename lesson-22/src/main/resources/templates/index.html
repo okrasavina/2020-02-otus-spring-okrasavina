@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Library</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <nav>
+        <a href="#"><img alt="Библиотека" src="/static/img/library.png" th:src="@{/img/library.png}"
+                         title="На главную страницу" width="100%"></a>
+    </nav>
+    <h1 class="welcome-text">Добро пожаловать в библиотеку</h1>
+</header>
+<main>
+    <p>Здесь вы можете отдохнуть от трудового дня и почитать книгу.</p>
+    <nav>
+        <h2>Возможные действия</h2>
+        <ul>
+            <li>
+                <p>Поиск книг:</p>
+                <ul>
+                    <li><a th:href="@{/search/author}" href="search-by-author.html">по автору</a></li>
+                    <li><a th:href="@{/search/genre}" href="search-by-genre.html">по жанру</a></li>
+                    <li><a th:href="@{/search/title}" href="search-by-title.html">по наименованию</a></li>
+                </ul>
+            </li>
+            <li>
+                <p>Здесь вы можете скорректировать базу данных этой библиотеки.<br/>Списки:</p>
+                <ul>
+                    <li><a th:href="@{/author}" href="author-list.html">авторы</a></li>
+                    <li><a th:href="@{/genre}" href="genre-list.html">жанры</a></li>
+                    <li><a th:href="@{/book}" href="book-list.html">книги</a></li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>
