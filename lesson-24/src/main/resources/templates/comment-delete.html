@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment delete form</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <form id="delete-form" th:action="@{/comment/delete(number=${comment.number},bookNumber=${comment.libraryBook.number})}" th:method="post" th:object="${comment}"
+          action="comment-delete.html">
+        <h1 th:text="${'Комментарий к книге ''' + comment.libraryBook.title + ''''}"></h1>
+
+        <div class="row">
+            <label for="id-input">Номер:&nbsp;</label>
+            <input class="readonly" id="id-input" type="text" th:field="*{number}" readonly="readonly" value="1">
+        </div>
+        <div class="row">
+            <label for="name-input">Текст комментария:&nbsp;</label>
+            <textarea class="readonly" id="name-input" rows="5" cols="30" th:field="*{textComment}" readonly="readonly">Текст комментария</textarea>
+        </div>
+
+        <div class="row">
+            <button type="submit" name="delete">Удалить</button>
+            <button type="submit" name="cancel">Отмена</button>
+        </div>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>
