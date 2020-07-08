@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Genre edit form</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <form id="edit-form" th:action="@{/genre/edit(number=${genre.number})}" th:method="post" th:object="${genre}"
+          action="genre-edit.html">
+        <h1>Литературный жанр</h1>
+
+        <div class="row">
+            <label for="id-input">Номер:&nbsp;</label>
+            <input class="readonly" id="id-input" type="text" th:field="*{number}" readonly="readonly" value="1">
+        </div>
+        <div class="row">
+            <label for="name-input">Наименование:&nbsp;</label>
+            <input id="name-input" th:class="${notNew} ? 'readonly'" th:field="*{name}" th:readonly="${notNew} ? 'readonly'" type="text"
+                   value="Комедия">
+        </div>
+        <div class="row">
+            <label for="description-input">Описание:&nbsp;</label>
+            <textarea cols="30" id="description-input" rows="5" th:field="*{description}">Описание жанра</textarea>
+        </div>
+
+        <div class="row">
+            <button type="submit" name="save">Сохранить</button>
+            <button type="submit" name="cancel">Отмена</button>
+        </div>
+    </form>
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search books by genre</title>
+    <link rel="stylesheet" href="/static/style.css" th:href="@{/style.css}">
+</head>
+<body>
+<header>
+    <div th:insert="~{fragments/header :: header}"></div>
+</header>
+<main>
+    <h1>Поиск книг по жанру</h1>
+    <form action="search-by-genre.html" th:action="@{/search/genre/book(name=${genre.name})}" th:object="${genre}">
+        <p>Введите наименование жанра для поиска книг</p>
+        <div class="row">
+            <label for="name-input">Жанр:</label>
+            <input id="name-input" type="text" th:field="*{name}" value=""/>
+        </div>
+        <div class="row">
+            <button type="submit">Поиск</button>
+        </div>
+    </form>
+
+</main>
+<footer>
+    <div th:insert="~{fragments/footer :: footer}"></div>
+</footer>
+</body>
+</html>
