@@ -15,3 +15,4 @@
 /lesson-20 - Spring WebFlux
 /lesson-22 - Spring Security: Механизмы аутентификации
 /lesson-24 - Spring Security: ACL
+/lesson-25 - Spring Batch 
