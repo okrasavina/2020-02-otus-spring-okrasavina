@@ -17,13 +17,12 @@ public class DefaultDanceManagerService implements DanceManagerService {
     @Override
     public DanceCouple makeCouple(Dancer dancer) {
         Style style = getRandomStyle();
-        DanceCouple couple = DanceCouple.builder()
+
+        return DanceCouple.builder()
                 .dancers(List.of(dancer, generateFemaleDancer()))
                 .style(style)
                 .movements(getDanceByStyle(style))
                 .build();
-
-        return couple;
     }
 
     private Dancer generateFemaleDancer() {
@@ -31,6 +30,10 @@ public class DefaultDanceManagerService implements DanceManagerService {
     }
 
     private List<Movement> getDanceByStyle(Style style) {
+        if (style.equals(Style.BACHATA)) {
+            throw new DanceStyleException(Style.BACHATA.toString());
+        }
+
         int countMovements = RandomUtils.nextInt(4, 20);
         List<Movement> movementsForDance = new ArrayList<>(countMovements);
         Movement[] movements = Movement.values();
