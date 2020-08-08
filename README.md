@@ -16,3 +16,4 @@
 /lesson-22 - Spring Security: Механизмы аутентификации
 /lesson-24 - Spring Security: ACL
 /lesson-25 - Spring Batch 
+/lesson-28 - Spring Integration: Endpoints и Flow Components
