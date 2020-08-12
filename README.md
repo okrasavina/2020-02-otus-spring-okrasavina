@@ -17,3 +17,4 @@
 /lesson-24 - Spring Security: ACL
 /lesson-25 - Spring Batch 
 /lesson-28 - Spring Integration: Endpoints и Flow Components
+/lesson-29 - Монолиты vs. Microservices (Round 2), Spring Boot Actuator - must have в микросервисах
