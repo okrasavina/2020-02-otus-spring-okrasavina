@@ -1,0 +1,25 @@
+2020-08-10 16:02:55.070  INFO 157652 --- [main] ru.otus.spring.LibraryApplication        : Starting LibraryApplication on LAPTOP-IKD4R2RV with PID 157652 (D:\Programming\Java\Source\2020-02-otus-spring-okrasavina\lesson-29\library_backend\target\classes started by Acer in D:\Programming\Java\Source\2020-02-otus-spring-okrasavina\lesson-29\library_backend)
+2020-08-10 16:02:55.075  INFO 157652 --- [main] ru.otus.spring.LibraryApplication        : No active profile set, falling back to default profiles: default
+2020-08-10 16:02:56.846  INFO 157652 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2020-08-10 16:02:56.958  INFO 157652 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 101ms. Found 4 JPA repository interfaces.
+2020-08-10 16:02:58.219  INFO 157652 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2020-08-10 16:02:58.230  INFO 157652 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2020-08-10 16:02:58.230  INFO 157652 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.35]
+2020-08-10 16:02:58.414  INFO 157652 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2020-08-10 16:02:58.416  INFO 157652 --- [main] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 3217 ms
+2020-08-10 16:02:59.042  INFO 157652 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2020-08-10 16:02:59.158  INFO 157652 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2020-08-10 16:02:59.390  INFO 157652 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2020-08-10 16:02:59.435  INFO 157652 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.15.Final
+2020-08-10 16:02:59.550  INFO 157652 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.0.Final}
+2020-08-10 16:02:59.672  INFO 157652 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.H2Dialect
+2020-08-10 16:03:00.597  INFO 157652 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2020-08-10 16:03:00.606  INFO 157652 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2020-08-10 16:03:01.706  WARN 157652 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2020-08-10 16:03:01.931  INFO 157652 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2020-08-10 16:03:02.610  INFO 157652 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path '/actuator'
+2020-08-10 16:03:02.718  INFO 157652 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2020-08-10 16:03:02.746  INFO 157652 --- [main] ru.otus.spring.LibraryApplication        : Started LibraryApplication in 8.877 seconds (JVM running for 11.2)
+2020-08-10 16:03:08.683  INFO 157652 --- [http-nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2020-08-10 16:03:08.687  INFO 157652 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2020-08-10 16:03:08.761  INFO 157652 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 74 ms
