@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    initialization-mode: always
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+logging:
+  level:
+    root: info
