@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    initialization-mode: always
+    driver-class-name: ${DB_DRIVER}
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+  data:
+    rest:
+      base-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    logfile:
+      enabled: true
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  level:
+    root: info
+  file:
+    name: "log/1.txt"
