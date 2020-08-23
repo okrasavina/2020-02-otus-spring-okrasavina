@@ -1,0 +1,14 @@
+server:
+  port: 8001
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8002/eureka
+  server:
+    wait-time-in-ms-when-sync-empty: 0
+    eviction-interval-timer-in-ms: 15000
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 30
+    instance-id: ${spring.application.name}:${server.port}
