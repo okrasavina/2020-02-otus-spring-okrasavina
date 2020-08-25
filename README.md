@@ -19,3 +19,4 @@
 /lesson-28 - Spring Integration: Endpoints и Flow Components
 /lesson-29 - Монолиты vs. Microservices (Round 2), Spring Boot Actuator - must have в микросервисах
 /lesson-31 - Docker, оркестрация
+/lesson-34 - Zuul, Hystrix Circuit Breaker, Sleuth, Zipkin, Hystrix Dashboard, Secure Configuration Properties
