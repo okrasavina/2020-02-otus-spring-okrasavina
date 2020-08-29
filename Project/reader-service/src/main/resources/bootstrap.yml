@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: reader-service
+  cloud:
+    config:
+      failFast: true
+      uri: http://config:5000
+
+server:
+  port: 9001

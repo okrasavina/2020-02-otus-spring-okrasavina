@@ -1,0 +1,22 @@
+server:
+  port: 8001
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: false
+    serviceUrl:
+      defaultZone: http://eureka-service:8001/eureka/
+  server:
+    wait-time-in-ms-when-sync-empty: 5
+    registry-sync-retries: 3
+    max-threads-for-peer-replication: 0
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

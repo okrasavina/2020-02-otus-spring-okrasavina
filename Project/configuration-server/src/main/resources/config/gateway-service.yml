@@ -1,0 +1,28 @@
+server:
+  port: 8080
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    serviceUrl:
+      defaultZone: http://eureka-service:8001/eureka/
+  server:
+    eviction-interval-timer-in-ms: 15000
+  instance:
+    lease-renewal-interval-in-seconds: 30
+    lease-expiration-duration-in-seconds: 90
+    instance-id: ${spring.application.name}:${server.port}
+    prefer-ip-address: true
+zuul:
+  prefix: "/library"
+  strip-prefix: true
+  routes:
+    library-storage: /storage/**
+    reader-service: /reader/**
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+
+
