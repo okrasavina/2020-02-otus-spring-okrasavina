@@ -1,0 +1,80 @@
+version: '3'
+services:
+  postgres:
+    image: "postgres"
+    restart: always
+    ports:
+      - "5432:5432"
+    container_name: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=library
+  eureka-service:
+    build:
+      context: ./eureka-discovery-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8001:8001"
+    hostname: eureka-service
+    container_name: eureka-service
+  config:
+    build:
+      context: ./configuration-server
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "5000:5000"
+    hostname: config
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service
+    container_name: config
+  gateway:
+    build:
+      context: ./gateway-service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - eureka-service
+    links:
+      - eureka-service
+    container_name: gateway
+  library-storage:
+    build:
+      context: ./library-storage
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "7001:7001"
+    depends_on:
+      - eureka-service
+      - postgres
+      - config
+    links:
+      - eureka-service
+  reader:
+    build:
+      context: ./reader-service
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "9001:9001"
+    depends_on:
+      - eureka-service
+      - config
+      - postgres
+    links:
+      - eureka-service
+#  client:
+#    build:
+#      context: ./library-frontend
+#      dockerfile: Dockerfile
+#    restart: always
+#    ports:
+#      - "3000:3000"
+#    container_name: client

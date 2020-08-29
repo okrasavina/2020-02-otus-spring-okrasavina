@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    initialization-mode: always
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    generate-ddl: false
+    hibernate:
+      ddl-auto: none
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+    logfile:
+      enabled: true
+  health:
+    defaults:
+      enabled: true
+
+logging:
+  level:
+    root: info
+  file:
+    name: "log/library.txt"
